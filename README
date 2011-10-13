@@ -2,7 +2,7 @@
 #   ADesk Bar - a lightweight application launcher for Openbox
 #
 #   Created by
-#       ADcomp <david.madbox@gmail.com>
+#       David Art [aka] ADcomp <david.madbox@gmail.com>
 #       http://www.adeskbar.tuxfamily.org/
 #
 #   This program is distributed under the terms of the GNU General Public License
@@ -11,9 +11,9 @@
 ##
 
 to launch AdeskBar :
-adeskbar <config_file>
+adeskbar <config_name>
 
-Config files : ~/.config/adeskbar/
+Config files : ~/.config/adeskbar/<config_name>.cfg
 Install dir : /usr/share/adeskbar/
 
 ---
@@ -35,7 +35,7 @@ su -c "./uninstall.sh"
 
 ---
 
-Create .deb package for Debian / Ubuntu
+Create .deb package for Debian / Ubuntu ( really bad script! )
 
 sudo ./make_deb.sh
 or
@@ -46,13 +46,13 @@ su -c "./make_deb.sh"
 Dependencies
 ------------
 
-python , python-gtk2 , python-cairo  , python-xdg, python-wnck
+python (<3) , python-gtk2 , python-cairo  , python-xdg, python-wnck
 
 recommend : python-dbus, python-keybinder, python-pyinotify
 
 plugin : 
 
-    - python-wnck :         tasklist/showdesktop
+    - python-wnck :         tasklist/showdesktop/intellihide
     - python-alsaaudio :    volume  ( python-pyalsaaudio on Arch / Slitaz )
     - python-vte :          terminal
     - python-xlib :         systray
