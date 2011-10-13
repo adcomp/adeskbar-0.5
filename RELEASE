@@ -1,0 +1,17 @@
+0.4.3   - fix bug in "tasklist"
+        - tasklist now follow icon size
+        - adeskbar should refresh on "gtk icon theme" change
+        - menu(s) should auto-update when add/remove applications
+
+0.4.2   - plugin "drawer" is come back
+        - some changes to plugin "tasklist"
+        - improvement for "grandient" ( ui )
+
+0.4.1a  - fix bug : crash when no "settings" menu .. 
+
+0.4.1   - fix "menu" plugin bug ( freeze because Thread )
+        - fix dependencies ( python-xdg ) in DEB package
+        
+0.4     - new plugin 'menu (simple)', Window list.
+        - interactive config ( don't need to refresh anymore )
+        

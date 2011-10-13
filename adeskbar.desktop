@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=ADesk Bar
+Comment=a lightweight application launcher for Openbox
+Exec=adeskbar
+Icon=adeskbar
+Categories=GNOME;Utility;
+NoDisplay=true
