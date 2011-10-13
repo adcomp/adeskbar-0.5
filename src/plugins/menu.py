@@ -3,8 +3,8 @@
 import gtk
 
 try:
-    NOTIFY = True
     import pyinotify
+    NOTIFY = True
 except:
     NOTIFY = False
     

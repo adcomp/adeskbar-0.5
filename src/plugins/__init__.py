@@ -52,6 +52,11 @@ info['menu'] = {
     'icon':'images/adeskbar.png',
     }
 
+info['simplemenu'] = {
+    'desc':'Simple Menu',
+    'icon':'start-here',
+    }
+
 info['searchbox'] = {
     'desc':'Search box',
     'icon':'images/plugins/searchbox.png',
