@@ -86,10 +86,10 @@ class Conf():
 
     def __init__(self, bar):
 
-        print 'config before ..'
-        for ind in bar.plg_mgr.plugins:
-            if bar.plg_mgr.plugins[ind].settings['cmd'] == '@drawer':
-                print bar.plg_mgr.plugins[ind].settings
+        #~ print 'config before ..'
+        #~ for ind in bar.plg_mgr.plugins:
+            #~ if bar.plg_mgr.plugins[ind].settings['cmd'] == '@drawer':
+                #~ print bar.plg_mgr.plugins[ind].settings
 
 
         ## tab for (position,align) on screen
@@ -918,12 +918,14 @@ class Conf():
         self.view.remove_item()
 
     def saveconf(self):
-        print 'config after ..'
+        
+        #### FIXME !!!
+        #~ print 'config after ..'
         for ind in self.bar.plg_mgr.plugins:
             if self.bar.plg_mgr.plugins[ind].settings['cmd'] == '@drawer':
                 self.bar.plg_mgr.plugins[ind].settings['launcher'] = self.bar.drawer[ind]
             
-                print self.bar.plg_mgr.plugins[ind].settings
+                #~ print self.bar.plg_mgr.plugins[ind].settings
             
         config.save(self.bar)
 

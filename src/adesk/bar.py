@@ -10,12 +10,6 @@ import cairo
 import gobject
 import traceback
 
-try:
-    import keybinder
-    KEYBINDER_PRESENT = True
-except:
-    KEYBINDER_PRESENT = False    
-
 # adeskbar modules
 import pluginmanager
 import ui
@@ -24,8 +18,6 @@ import config
 import desktop
 import core
 import draw
-#~ import rundialog
-#~ import terminal
 
 ID_CMD, ID_ICON, ID_NAME  = 0, 1, 2
 
@@ -67,23 +59,6 @@ class BarManager():
 
         self.init_bar_callback()
 
-        #~ self.rundialog = rundialog.RunDialog(self)
-        #~ self.terminal = terminal.Terminal(self)
-        
-        ## global keybind
-        #~ gobject.timeout_add(2000, self.set_keybind)
-
-    def set_keybind(self):
-        keystr = "<Super>r"
-        ret = keybinder.bind(keystr, self.keybinder_callback, self.rundialog)
-        print 'retour keybind :', ret
-        
-        #~ keystr = "<Super>space"
-        #~ keybinder.bind(keystr, self.keybinder_callback, self.terminal)
-        
-    def keybinder_callback(self, user_data):
-        user_data.toggle()
-
     def create_bar(self):
         """ create and configure gtk.Window (bar) """
         self.logInfo('BarManager create bar')
@@ -105,12 +80,34 @@ class BarManager():
 
             if self.cfg['position'] == "bottom" or self.cfg['position'] == "top":
                 req_size = int(screen_width * self.cfg['fixed_size']/100.0)
-                self.win.set_geometry_hints(None, min_width=req_size, min_height=min_size, max_width=req_size, max_height=min_size, base_width=-1, base_height=-1, width_inc=-1, height_inc=-1, min_aspect=-1.0, max_aspect=-1.0)
+                self.win.set_geometry_hints(None, min_width=req_size, 
+                                            min_height=min_size, 
+                                            max_width=req_size, 
+                                            max_height=min_size, 
+                                            base_width=-1, 
+                                            base_height=-1, 
+                                            width_inc=-1, 
+                                            height_inc=-1, 
+                                            min_aspect=-1.0, 
+                                            max_aspect=-1.0)
             else:
                 req_size = int(screen_height * self.cfg['fixed_size']/100.0)
-                self.win.set_geometry_hints(None, min_width=min_size, min_height=req_size, max_width=min_size, max_height=req_size, base_width=-1, base_height=-1, width_inc=-1, height_inc=-1, min_aspect=-1.0, max_aspect=-1.0)
+                self.win.set_geometry_hints(None, min_width=min_size, 
+                                            min_height=req_size, 
+                                            max_width=min_size, 
+                                            max_height=req_size, 
+                                            base_width=-1, 
+                                            base_height=-1, 
+                                            width_inc=-1, 
+                                            height_inc=-1, 
+                                            min_aspect=-1.0, 
+                                            max_aspect=-1.0)
         else:
-            self.win.set_geometry_hints(None, min_width=-1, min_height=-1, max_width=-1, max_height=-1, base_width=-1, base_height=-1, width_inc=-1, height_inc=-1, min_aspect=-1.0, max_aspect=-1.0)
+            self.win.set_geometry_hints(None, min_width=-1, min_height=-1, 
+                                        max_width=-1, max_height=-1, 
+                                        base_width=-1, base_height=-1, 
+                                        width_inc=-1, height_inc=-1, 
+                                        min_aspect=-1.0, max_aspect=-1.0)
 
     def init_bar_callback(self):
         self.logInfo('BarManager init bar callback')
@@ -139,7 +136,8 @@ class BarManager():
             return        
         
         # reset struct
-        widget.window.property_change("_NET_WM_STRUT", "CARDINAL", 32, gtk.gdk.PROP_MODE_REPLACE, [0,0,0,0])
+        widget.window.property_change("_NET_WM_STRUT", "CARDINAL", 32, 
+                                      gtk.gdk.PROP_MODE_REPLACE, [0,0,0,0])
         
         # only set strut if "panel" mode
         if not (self.cfg['fixed_mode'] and  self.cfg['reserve_space']):
@@ -159,20 +157,32 @@ class BarManager():
                 w = self.cfg['hidden_size']
                 
         if self.cfg['position'] == "bottom":
-            if not self.bar_hidden and not self.cfg['bar_style'] == 0: h += self.cfg['offset_pos'] 
-            widget.window.property_change("_NET_WM_STRUT", "CARDINAL", 32, gtk.gdk.PROP_MODE_REPLACE, [0,0,0,h])
+            if not self.bar_hidden and not self.cfg['bar_style'] == 0: 
+                h += self.cfg['offset_pos'] 
+            widget.window.property_change("_NET_WM_STRUT", "CARDINAL", 
+                                          32, gtk.gdk.PROP_MODE_REPLACE, 
+                                          [0,0,0,h])
 
         elif self.cfg['position'] == "top":
-            if not self.bar_hidden and not self.cfg['bar_style'] == 0: h += self.cfg['offset_pos'] 
-            widget.window.property_change("_NET_WM_STRUT", "CARDINAL", 32, gtk.gdk.PROP_MODE_REPLACE, [0,0,h,0])
+            if not self.bar_hidden and not self.cfg['bar_style'] == 0:
+                h += self.cfg['offset_pos'] 
+            widget.window.property_change("_NET_WM_STRUT", "CARDINAL", 
+                                          32, gtk.gdk.PROP_MODE_REPLACE, 
+                                          [0,0,h,0])
 
         elif self.cfg['position'] == "left":
-            if not self.bar_hidden and not self.cfg['bar_style'] == 0: w += self.cfg['offset_pos'] 
-            widget.window.property_change("_NET_WM_STRUT", "CARDINAL", 32, gtk.gdk.PROP_MODE_REPLACE, [w,0,0,0])
+            if not self.bar_hidden and not self.cfg['bar_style'] == 0:
+                w += self.cfg['offset_pos'] 
+            widget.window.property_change("_NET_WM_STRUT", "CARDINAL", 
+                                          32, gtk.gdk.PROP_MODE_REPLACE, 
+                                          [w,0,0,0])
 
         elif self.cfg['position'] == "right":
-            if not self.bar_hidden and not self.cfg['bar_style'] == 0: w += self.cfg['offset_pos'] 
-            widget.window.property_change("_NET_WM_STRUT", "CARDINAL", 32, gtk.gdk.PROP_MODE_REPLACE, [0,w,0,0])
+            if not self.bar_hidden and not self.cfg['bar_style'] == 0:
+                w += self.cfg['offset_pos'] 
+            widget.window.property_change("_NET_WM_STRUT", "CARDINAL", 
+                                          32, gtk.gdk.PROP_MODE_REPLACE, 
+                                          [0,w,0,0])
 
     def win_size_allocate(self, widget, allocation):
         self.logInfo('BarManager window size allocate')
@@ -299,19 +309,15 @@ class BarManager():
         # start bar callback
         self.init_bar_callback()
 
-        ## FIXME!
         ## gtk.Window doesn't stick after reload config ?!
         self.win.realize()
         self.win.stick()
-        #~ self.reposition()
         self.win.show_all()
 
         # init all plugins
         self.plg_mgr.on_init()
 
-        ## FIXME!!
         # sometimes reposition doesn't work :/ .. quick hack
-        #~ gobject.timeout_add(500, self.reposition)
         gobject.idle_add(self.reposition)
 
     def set_below_or_above(self):
