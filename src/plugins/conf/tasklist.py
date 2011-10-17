@@ -5,7 +5,8 @@ import gtk
 settings = { 
     'desktop_color':'#EEEEEE', 'desktop_font':'Sans Bold 12',
     'show_desk_pos':1, 'show_desk_name':0, 'show_all_win':1,
-    'active_color':'#7F7F7F', 'padding':10, 'opacity':14100
+    'active_color':'#7F7F7F', 'padding':10, 'opacity':14100,
+    'expand': 1, 
     }
 
 class config():
@@ -20,6 +21,8 @@ class config():
             if not key in self.settings:
                 self.settings[key] = settings[key]
 
+
+        ### Active color - Padding
         hhbox = gtk.HBox(False, 0)
         hhbox.set_spacing(10)
 
@@ -35,7 +38,7 @@ class config():
         self.active_color.set_alpha(self.settings['opacity'])
         hbox.pack_start(label, False)
         hbox.pack_start(self.active_color, False)
-        hhbox.pack_start(hbox, True)
+        hhbox.pack_start(hbox, False)
 
         hbox = gtk.HBox(False, 0)
         hbox.set_spacing(10)
@@ -44,48 +47,49 @@ class config():
         self.padding = gtk.SpinButton(adjustment=adjustment, climb_rate=0.0, digits=0)
         hbox.pack_start(label, False)
         hbox.pack_start(self.padding, False)
-        hhbox.pack_start(hbox, True)
+        hhbox.pack_start(hbox, False)
         
-        box.pack_start(hhbox, True)
+        box.pack_start(hhbox, False)
 
 
+        ### Show all windows - desktop position/name
         self.show_all_win_checkbox = gtk.CheckButton('Show all windows')
         self.show_all_win_checkbox.set_active(int(self.settings['show_all_win']))
+
+        box.pack_start(self.show_all_win_checkbox, False)
         
-        box.pack_start(self.show_all_win_checkbox, True)
-
-
-        hbox = gtk.HBox()
-        box.pack_start(hbox, True)
+        
+        ### Show desktop position/name
+        showdesktopbox = gtk.HBox()
         
         self.show_desk_pos_checkbox = gtk.CheckButton('Show desktop position')
         self.show_desk_pos_checkbox.set_active(int(self.settings['show_desk_pos']))
-        hbox.pack_start(self.show_desk_pos_checkbox, True)
+        showdesktopbox.pack_start(self.show_desk_pos_checkbox, True)
 
         self.show_desk_name_checkbox = gtk.CheckButton('Show desktop name')
         self.show_desk_name_checkbox.set_active(int(self.settings['show_desk_name']))
-        
-        label = gtk.Label('     ')
 
         colour = map.alloc_color(self.settings['desktop_color'])
         self.desk_color = gtk.ColorButton(colour)
         self.desk_font = gtk.FontButton(self.settings['desktop_font'])
+        showdesktopbox.pack_start(self.desk_font, True)
+        showdesktopbox.pack_start(self.desk_color, False)
 
-        optionbox = gtk.HBox(False, 0)
-        optionbox.set_border_width(0)
-        optionbox.set_spacing(10)
+        box.pack_start(showdesktopbox, False)
+
+        showdesknamebox = gtk.HBox(False, 0)
+        showdesknamebox.set_border_width(0)
+        showdesknamebox.set_spacing(10)
+        label = gtk.Label('     ')
+        showdesknamebox.pack_start(label, False)
+        showdesknamebox.pack_start(self.show_desk_name_checkbox, False)
         
-        optionbox.pack_start(label, False)
-        optionbox.pack_start(self.show_desk_name_checkbox, True)
-        
-        box.pack_start(optionbox, True)
+        box.pack_start(showdesknamebox, False)
 
-        optionbox = gtk.HBox(False, 0)
-        optionbox.set_border_width(0)
-        optionbox.set_spacing(10)
-
-        hbox.pack_start(self.desk_font, True)
-        hbox.pack_start(self.desk_color, False)
+        ### expand
+        self.expand_checkbox = gtk.CheckButton('Fills space on the bar in fixed mode')
+        self.expand_checkbox.set_active(int(self.settings['expand']))
+        box.pack_start(self.expand_checkbox, False)
 
     def save_change(self):
         self.settings['opacity'] = self.active_color.get_alpha()
@@ -96,4 +100,5 @@ class config():
         self.settings['show_desk_pos'] = int(self.show_desk_pos_checkbox.get_active())
         self.settings['show_desk_name'] = int(self.show_desk_name_checkbox.get_active())
         self.settings['show_all_win'] = int(self.show_all_win_checkbox.get_active())
+        self.settings['expand'] = int(self.expand_checkbox.get_active())
         self.conf.plg_mgr.plugins[self.ind].restart()

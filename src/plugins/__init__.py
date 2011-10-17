@@ -82,6 +82,12 @@ info['spacer'] = {
     'icon':'images/plugins/spacer.png',
     }
 
+info['expander'] = {
+    'desc':'Expander',
+    'icon':'images/plugins/spacer.png',
+    'xxx':'Fills space on the panel in expand mode',
+    }
+
 info['terminal'] = {
     'desc':'Quick Terminal',
     'icon':'terminal',

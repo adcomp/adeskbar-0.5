@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 #    ADesk Bar - application launcher for openbox
@@ -64,6 +64,7 @@ if cfg_file == '--help' or cfg_file == '-h':
 import adesk.bar
 bar_mgr = adesk.bar.BarManager(cfg_file)
 
+### !! if I move this in BarManager.init , no callback .. why ?
 try:
     import gio
     home = os.environ['HOME']

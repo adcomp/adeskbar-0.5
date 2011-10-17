@@ -201,6 +201,7 @@ class Conf():
         BoxBase.pack_end(BoxControls, False)
 
         self.window.add(BoxBase)
+        self.window.resize(450, 400)
         self.window.show_all()
 
     def switch_page(self, flag_edit=False):

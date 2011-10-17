@@ -147,6 +147,12 @@ class Plugin(Plg.PluginContainer):
         self.container.destroy()
         self.mainbox.destroy()
         
+        ## set_child_packing(child, expand, fill, padding, pack_type)
+        if int(self.settings['expand']):
+            self.bar.plg_mgr.box.set_child_packing(self, True, True, 0, gtk.PACK_START)
+        else:
+            self.bar.plg_mgr.box.set_child_packing(self, False, False, 0, gtk.PACK_START)
+        
         self.ui_tasklist()
         self.workspace_changed(self.screen, None)
 

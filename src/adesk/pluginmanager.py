@@ -112,7 +112,9 @@ class PluginManager:
 
             widget.show()
 
-            if launcher['cmd'][1:] == 'tasklist':
+            #~ if launcher['cmd'][1:] == 'tasklist' or launcher['cmd'][1:] == 'expander':
+
+            if launcher['cmd'][1:] == 'expander' or (launcher['cmd'][1:] == 'tasklist' and int(launcher['expand'])):
                 self.box.pack_start(widget, True, True)
             else:
                 self.box.pack_start(widget, False, False)
