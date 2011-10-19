@@ -4,6 +4,7 @@
 import gtk
 import traceback
 import gobject
+import os 
 
 # adeskbar modules
 import core
@@ -17,7 +18,8 @@ class PluginManager:
         """ configure container for plugins """
 
         self.bar = bar
-        self.index = []
+        self.index = bar.configuration.l_ind
+        #~ self.index = []
         self.plugins = {}
 
         if bar.cfg['position'] == "top" or bar.cfg['position'] == "bottom":
@@ -38,14 +40,19 @@ class PluginManager:
         self.table.set_row_spacings(0)
         self.table.set_col_spacings(0)
 
-        self.table.attach(self.spacer_left_top, 0, 1, 0, 1, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK)
-        self.table.attach(self.spacer_left_bottom, 0, 1, 2, 3, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK)
-        self.table.attach(self.spacer_right, 2, 3, 0, 1, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK)
+        self.table.attach(self.spacer_left_top, 0, 1, 0, 1, 
+                            xoptions=gtk.SHRINK, yoptions=gtk.SHRINK)
+        self.table.attach(self.spacer_left_bottom, 0, 1, 2, 3, 
+                            xoptions=gtk.SHRINK, yoptions=gtk.SHRINK)
+        self.table.attach(self.spacer_right, 2, 3, 0, 1, 
+                            xoptions=gtk.SHRINK, yoptions=gtk.SHRINK)
         
         if self.bar.cfg['fixed_mode']:
-            self.table.attach(self.box, 1, 2, 1, 2, xoptions=gtk.EXPAND|gtk.FILL, yoptions=gtk.EXPAND|gtk.FILL)
+            self.table.attach(self.box, 1, 2, 1, 2, 
+                    xoptions=gtk.EXPAND|gtk.FILL, yoptions=gtk.EXPAND|gtk.FILL)
         else:
-            self.table.attach(self.box, 1, 2, 1, 2, xoptions=gtk.SHRINK, yoptions=gtk.SHRINK)
+            self.table.attach(self.box, 1, 2, 1, 2, 
+                    xoptions=gtk.SHRINK, yoptions=gtk.SHRINK)
 
         bar.win.add(self.table)
         self.resize_spacer()
@@ -62,7 +69,7 @@ class PluginManager:
         #~ if not self.bar.cfg['fixed_mode']:
         self.box.connect('size-allocate', self.box_size_allocate)
 
-    def load_plugin(self, launcher, is_plugin = False):
+    def load_plugin(self, index, launcher, is_plugin = False):
         """ load plugin as widget """
         
         try:
@@ -76,9 +83,20 @@ class PluginManager:
             
         except Exception as e:
             traceback.print_exc()
+            core.logINFO('error while loading %s ...' % launcher['cmd'])
             return None
 
         return widget
+
+    def add_plugin(self, index, position):
+        ret = self.append(index, self.bar.launcher[index])
+        
+        if ret:
+            self.index.append(index)
+            self.reorder(index, position)
+            return True
+        
+        return False
 
     def append(self, index, launcher):
         """ append plugin (widget) to main bar """
@@ -95,11 +113,11 @@ class PluginManager:
             elif launcher['cmd'][1:] == 'drawer' and index in self.bar.drawer:
                     launcher['launcher'] = self.bar.drawer[index]
 
-        widget = self.load_plugin(launcher, is_plugin)
+        widget = self.load_plugin(index, launcher, is_plugin)
 
         if widget: # load OK
-            widget.tooltip = launcher['name']
             widget.index = index
+            widget.tooltip = launcher['name']
 
             if widget.can_show_icon:
                 widget.set_icon(launcher['icon'], is_separator)
@@ -112,14 +130,11 @@ class PluginManager:
 
             widget.show()
 
-            #~ if launcher['cmd'][1:] == 'tasklist' or launcher['cmd'][1:] == 'expander':
-
             if launcher['cmd'][1:] == 'expander' or (launcher['cmd'][1:] == 'tasklist' and int(launcher['expand'])):
                 self.box.pack_start(widget, True, True)
             else:
                 self.box.pack_start(widget, False, False)
 
-            self.index.append(index)
             self.plugins[index] = widget
             return widget
         else:

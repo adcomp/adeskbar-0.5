@@ -14,12 +14,12 @@ ICON_THEME = Core.ICON_THEME
 		
 class PluginContainer(gtk.EventBox):
     """PluginContainer is a gtk EventBox."""
-    def __init__(self, app, settings):
+    def __init__(self, bar, settings):
         gtk.EventBox.__init__(self)
         self.set_border_width(0)
         self.set_visible_window(False)
-        self.app = app
-        self.cfg = app.cfg
+        self.bar = bar
+        self.cfg = bar.cfg
         self.settings = settings
         self.index = None
         self.is_visible = False
@@ -55,11 +55,11 @@ class Plugin(gtk.EventBox):
     """Plugin is a gtk EventBox with a cairo surface painted over it."""
     __gsignals__ = {'expose-event' : 'override',}
     
-    def __init__(self, app, settings):
+    def __init__(self, bar, settings):
         gtk.EventBox.__init__(self)
         self.set_visible_window(False)
-        self.app = app
-        self.cfg = app.cfg
+        self.bar = bar
+        self.cfg = bar.cfg
         self.settings = settings
         self.index = None
 
@@ -81,8 +81,8 @@ class Plugin(gtk.EventBox):
         x, y = a.x, a.y
 
         if self.focus and self.can_zoom and not self.is_visible:
-            offset = int( (self.app.zoom_size - self.cfg['icon_size'])/2 )
-            w, h = self.app.zoom_size, self.app.zoom_size
+            offset = int( (self.bar.zoom_size - self.cfg['icon_size'])/2 )
+            w, h = self.bar.zoom_size, self.bar.zoom_size
             if self.cfg['position']=='top':
                 x = x - offset
             elif self.cfg['position']=='bottom':
@@ -144,17 +144,17 @@ class Plugin(gtk.EventBox):
 
     def draw_frame(self, ctx, x, y):
         if self.is_pressed:
-            pixbuf = self.app.pixbuf_pressed.scale_simple(self.cfg['icon_size']+4, self.cfg['icon_size']+4, gtk.gdk.INTERP_BILINEAR)
+            pixbuf = self.bar.pixbuf_pressed.scale_simple(self.cfg['icon_size']+4, self.cfg['icon_size']+4, gtk.gdk.INTERP_BILINEAR)
         else:
-            pixbuf = self.app.pixbuf_glow.scale_simple(self.cfg['icon_size']+4, self.cfg['icon_size']+4, gtk.gdk.INTERP_BILINEAR)
+            pixbuf = self.bar.pixbuf_glow.scale_simple(self.cfg['icon_size']+4, self.cfg['icon_size']+4, gtk.gdk.INTERP_BILINEAR)
         ctx.set_source_pixbuf(pixbuf, x-2, y-2)
         ctx.paint()
         return
 
     def set_tooltip(self, tooltip):
         self.tooltip = tooltip
-        self.app.tooltip.set_tooltip(tooltip)
-        self.app.tooltip.reposition(self)
+        self.bar.tooltip.set_tooltip(tooltip)
+        self.bar.tooltip.reposition(self)
 
     def get_tooltip(self, tooltip):
         return self.tooltip
@@ -178,13 +178,13 @@ class Plugin(gtk.EventBox):
 
         if not path_icon:
             self.pixbuf = Core.pixbuf_from_file('images/def_icon.png', w, h)
-            self.pixbuf_zoom = Core.pixbuf_from_file('images/def_icon.png', self.app.zoom_size, self.app.zoom_size)
+            self.pixbuf_zoom = Core.pixbuf_from_file('images/def_icon.png', self.bar.zoom_size, self.bar.zoom_size)
             self.current_icon = 'images/def_icon.png'
             
         ## real path .. load from file
         elif path_icon[0] == '/' or ( len(path_icon) > 7 and path_icon[:7] == 'images/'):
             self.pixbuf = Core.pixbuf_from_file(path_icon, w, h)
-            self.pixbuf_zoom = Core.pixbuf_from_file(path_icon, self.app.zoom_size, self.app.zoom_size)
+            self.pixbuf_zoom = Core.pixbuf_from_file(path_icon, self.bar.zoom_size, self.bar.zoom_size)
             self.current_icon = path_icon
             
         ## load from icon theme
@@ -194,21 +194,20 @@ class Plugin(gtk.EventBox):
             try:
                 self.pixbuf = ICON_THEME.load_icon(path_icon, self.cfg['icon_size'], gtk.ICON_LOOKUP_USE_BUILTIN)
                 self.pixbuf = self.pixbuf.scale_simple(self.cfg['icon_size'], self.cfg['icon_size'], gtk.gdk.INTERP_BILINEAR)
-                #~ self.pixbuf_zoom = ICON_THEME.load_icon(path_icon, int(self.app.zoom_size), gtk.ICON_LOOKUP_USE_BUILTIN)
-                self.pixbuf_zoom = self.pixbuf.scale_simple(int(self.app.zoom_size), int(self.app.zoom_size), gtk.gdk.INTERP_BILINEAR)
+                #~ self.pixbuf_zoom = ICON_THEME.load_icon(path_icon, int(self.bar.zoom_size), gtk.ICON_LOOKUP_USE_BUILTIN)
+                self.pixbuf_zoom = self.pixbuf.scale_simple(int(self.bar.zoom_size), int(self.bar.zoom_size), gtk.gdk.INTERP_BILINEAR)
                 self.current_icon = path_icon
             except:
                 pass
 
-
         ## check if pixbuf is ok
         if not self.pixbuf:
             self.pixbuf = Core.pixbuf_from_file('images/def_icon.png', w, h)
-            self.pixbuf_zoom = Core.pixbuf_from_file('images/def_icon.png', self.app.zoom_size, self.app.zoom_size)
+            self.pixbuf_zoom = Core.pixbuf_from_file('images/def_icon.png', self.bar.zoom_size, self.bar.zoom_size)
             self.current_icon = 'images/def_icon.png'
 
-        if self.app.init_flag:
-            self.app.update()
+        if self.bar.init_flag:
+            self.bar.update()
 
     def draw(self, cr):
         pass
@@ -229,4 +228,4 @@ class Plugin(gtk.EventBox):
         pass
 
     def call_bar_update(self):
-        self.app.update()
+        self.bar.update()

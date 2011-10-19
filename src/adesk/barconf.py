@@ -16,16 +16,15 @@ import traceback
 import time
 import re
 
-## adesk modules
+# adeskbar modules
 import core
-import plugins
 import plugin
 import config
 import ui
 import release
 
 ## Test
-import check
+#~ import check
 
 ## Translation
 locale.setlocale(locale.LC_ALL, '')
@@ -86,12 +85,6 @@ class Conf():
 
     def __init__(self, bar):
 
-        #~ print 'config before ..'
-        #~ for ind in bar.plg_mgr.plugins:
-            #~ if bar.plg_mgr.plugins[ind].settings['cmd'] == '@drawer':
-                #~ print bar.plg_mgr.plugins[ind].settings
-
-
         ## tab for (position,align) on screen
         self.pos_align = [(1,0),(1,1),(1,2),
                           (3,0),(3,1),(3,2),
@@ -128,7 +121,7 @@ class Conf():
         # IconView
         self.frame_iconView = gtk.Frame()
         store = gtk.ListStore(str, gtk.gdk.Pixbuf)
-
+            
         ## preferences
         pixbuf = core.pixbuf_from_file('images/conf/preferences.png')
         store.append([_('preferences'), pixbuf])
@@ -145,10 +138,6 @@ class Conf():
         pixbuf = core.pixbuf_from_file('images/conf/advanced.png')
         store.append([_('advanced'), pixbuf])
 
-        ## about
-        #~ pixbuf = core.pixbuf_from_file('images/conf/about.png')
-        #~ store.append([_('about'), pixbuf])
-
         iconView = gtk.IconView(store)
         iconView.set_text_column(0)
         iconView.set_pixbuf_column(1)
@@ -158,23 +147,17 @@ class Conf():
         iconView.set_row_spacing(0)
         iconView.connect("selection-changed", self.iconView_activated)
         iconView.select_path(0)
-
+        self.frame_iconView.add(iconView)
+        
         # Containers
-        BoxBase = gtk.VBox()
-        BoxBase.set_spacing(5)
-        BoxBase.set_border_width(10)
-
-        BoxMain = gtk.HBox()
-        BoxMain.set_spacing(0)
-        BoxMain.set_border_width(0)
-
         BoxControls = gtk.HBox()
-        BoxControls.set_spacing(5)
+        BoxControls.set_spacing(4)
 
         ## Main Controls
+        
         # test
-        #~ button_refresh = gtk.Button(stock=gtk.STOCK_REFRESH)
-        #~ button_refresh.connect("clicked", self.switch_page)
+        #~ button_refresh = gtk.Button(stock=gtk.STOCK_PROPERTIES)
+        #~ button_refresh.connect("clicked", self.my_test)
         #~ BoxControls.pack_end(button_refresh, False, False)
         
         # About
@@ -184,7 +167,7 @@ class Conf():
         
         # Exit
         button = gtk.Button(stock=gtk.STOCK_CLOSE)
-        button.connect("clicked", self.destroy)
+        button.connect("clicked", self.close_and_save)
         BoxControls.pack_end(button, False, False)
 
         self.ui_Preferences()
@@ -193,16 +176,23 @@ class Conf():
         self.ui_Advanced()
         self.ui_About()
 
-        BoxMain.add(self.nbook)
-        self.frame_iconView.add(iconView)
+        BoxBase = gtk.VBox()
+        BoxBase.set_spacing(4)
+        BoxBase.set_border_width(12)
         BoxBase.pack_start(self.frame_iconView, False)
-        BoxBase.pack_start(BoxMain, True)
+        BoxBase.pack_start(self.nbook, True)
         BoxBase.pack_start(gtk.HSeparator(), False)
         BoxBase.pack_end(BoxControls, False)
 
         self.window.add(BoxBase)
         self.window.resize(450, 400)
         self.window.show_all()
+
+    def my_test(self, widget=None):
+        for ind in self.bar.configuration.l_ind:
+            print 'a) ', self.bar.configuration.launcher[ind]
+            print 'b) ', self.launcher[ind]
+            print 
 
     def switch_page(self, flag_edit=False):
         if self.nbook.get_current_page() == 2 or flag_edit:
@@ -379,16 +369,15 @@ class Conf():
         label.set_alignment(0,0.5)
         r_box.pack_start(label, 0)
 
-        mod_box = gtk.VBox(False, 10)
-        mod_box.set_border_width(10)
-        check.check_modules(mod_box)
-
-        scrolled = gtk.ScrolledWindow()
-        scrolled.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
-        scrolled.add_with_viewport(mod_box)
+        #~ mod_box = gtk.VBox(False, 10)
+        #~ mod_box.set_border_width(10)
+        #~ check.check_modules(mod_box)
+        #~ scrolled = gtk.ScrolledWindow()
+        #~ scrolled.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        #~ scrolled.add_with_viewport(mod_box)
 
         mainbox.pack_start(about_box, 0)
-        mainbox.pack_start(scrolled)
+        #~ mainbox.pack_start(scrolled)
         
 
         label = gtk.Label('About')
@@ -640,7 +629,7 @@ class Conf():
 
         ## Backgroung color
         map = self.window.get_colormap()
-        colour = map.alloc_color(self.config['background_color'])
+        colour = map.alloc_color(self.config['bg_color'])
 
         self.bt_bg_color  = gtk.ColorButton(colour)
         self.bt_bg_color.connect('color-set', self.set_bg_color)
@@ -651,7 +640,7 @@ class Conf():
         bBox.pack_start(box, False, True)
 
         # bg_gradient
-        colour = map.alloc_color(self.config['background_gradient_color'])
+        colour = map.alloc_color(self.config['bg_gradient_color'])
         self.bt_bg_gradient_color = gtk.ColorButton(colour)
         self.bt_bg_gradient_color.set_use_alpha(True)
         self.bt_bg_gradient_color.set_alpha(self.config['bg_gradient_alpha'])
@@ -838,6 +827,12 @@ class Conf():
             model = view.get_model()
             Edit_Item(self, model, selection)
 
+    def check_systray(self):
+        for index in self.launcher:
+            if self.launcher[index]['cmd'] == '@systray':
+                return True
+        return False
+
     def new_item_custom(self, widget):
         app = core.App()
         app.Name = 'Custom'
@@ -845,25 +840,42 @@ class Conf():
         self.new_item_menu(widget, app)
         self.edit_item(self.view)
 
-    def new_item_plugin(self, widget, plugin_name):
-
+    def new_item(self):
         index = str(int(time.time()))
         self.view.new_entry(index)
-        selection = self.view.get_cursor()[0][0]
+        position = self.view.get_cursor()[0][0]
         model   = self.view.get_model()
-        item    = model.get_iter(selection)
+        item    = model.get_iter(position)
+        
+        if position == None:
+            core.logINFO(' -- no position in view ?')
+            return False
+        
+        return (index, position, model, item)
 
-        model.set_value(item, ID_NAME, plugins.info[plugin_name]['desc'])
-        set_icon(plugins.info[plugin_name]['icon'], model, item)
+    def new_item_plugin(self, widget, plugin_name):
+        if plugin_name == 'systray' and self.check_systray():
+            print 'already one systray ..'
+            return
+
+        ret = self.new_item()
+        
+        if ret:
+            (index, position, model, item) = ret
+        else:
+            return 
+
+        model.set_value(item, ID_NAME, self.plugin_menu._list[plugin_name]['Name'])
+        set_icon(self.plugin_menu._list[plugin_name]['Icon'], model, item)
         
         ## create new launcher
         self.launcher[index] = {}
         self.launcher[index]['cmd'] = '@' + plugin_name
-        self.launcher[index]['icon'] = plugins.info[plugin_name]['icon']
-        self.launcher[index]['name'] = plugins.info[plugin_name]['desc']
+        self.launcher[index]['icon'] = self.plugin_menu._list[plugin_name]['Icon']
+        self.launcher[index]['name'] = self.plugin_menu._list[plugin_name]['Name']
 
         try:
-            exec("import plugins.conf.%s as plugin_conf" % plugin_name)
+            exec("import plugins.%s.config as plugin_conf" % plugin_name)
             for key in plugin_conf.settings:
                 self.launcher[index][key] = plugin_conf.settings[key]
         except Exception, e:
@@ -878,20 +890,22 @@ class Conf():
             self.bar.restart()
             self.plg_mgr = self.bar.plg_mgr
         else:
-            if self.plg_mgr.append(index, self.launcher[index]):
-                self.plg_mgr.reorder(index, selection)
+            if self.plg_mgr.add_plugin(index, position):
                 self.plg_mgr.plugins[index].on_init()
             else:
                 self.remove_item(None)
+                self.bar.configuration.l_ind.remove(index)
+                self.launcher.pop(index)
 
     def new_item_menu(self, widget, app):
-    
-        index = str(int(time.time()))
-        self.view.new_entry(index)
-        selection = self.view.get_cursor()[0][0]
-        model   = self.view.get_model()
-        item    = model.get_iter(selection)
         
+        ret = self.new_item()
+        
+        if ret:
+            (index, position, model, item) = ret
+        else:
+            return 
+
         model.set_value(item, ID_NAME, app.Name)
         set_icon(app.Icon, model, item)
 
@@ -908,35 +922,24 @@ class Conf():
             self.launcher[index]['icon'] = app.Icon
  
         command = app.Exec.split('%')[0]
-        #~ if menu_item.launch_in_terminal:
-            #~ command = 'x-terminal-emulator -e %s' % command
+        if app.Terminal:
+            command = 'x-terminal-emulator -e %s' % command
         self.launcher[index]['cmd'] = command
-                
-        self.plg_mgr.append(index, self.launcher[index])
-        self.plg_mgr.reorder(index, selection)
+        
+        self.plg_mgr.add_plugin(index, position)
 
     def remove_item(self, widget):
         self.view.remove_item()
 
-    def saveconf(self):
-        
-        #### FIXME !!!
-        #~ print 'config after ..'
-        for ind in self.bar.plg_mgr.plugins:
-            if self.bar.plg_mgr.plugins[ind].settings['cmd'] == '@drawer':
-                self.bar.plg_mgr.plugins[ind].settings['launcher'] = self.bar.drawer[ind]
-            
-                #~ print self.bar.plg_mgr.plugins[ind].settings
-            
-        config.save(self.bar)
+    def close_and_save(self, widget=None):
+        self.window.hide()
+        self.window.destroy()
 
     def destroy(self, widget=None, data=None):
         ## save change
-        self.saveconf()
+        self.bar.configuration.save()
         ## and clear conf .. 
         self.bar.bar_conf = None
-        self.window.hide()
-        self.window.destroy()
 
     ### callback #######################################################
     
@@ -1025,7 +1028,7 @@ class Conf():
     def set_bg_color(self, widget):
         color = widget.get_color()
         color = gtk.color_selection_palette_to_string([color])
-        self.config['background_color'] = color
+        self.config['bg_color'] = color
         self.config['bg_color_rgb'] = core.hex2rgb(color)
         self.bar.draw_bg()
         self.bar.update()
@@ -1033,7 +1036,7 @@ class Conf():
     def set_bg_gradient_color(self, widget):
         color = widget.get_color()
         color = gtk.color_selection_palette_to_string([color])
-        self.config['background_gradient_color'] = color
+        self.config['bg_gradient_color'] = color
         self.config['bg_gradient_color_rgb'] = core.hex2rgb(color)
         self.config['bg_gradient_alpha'] = widget.get_alpha()
         self.bar.draw_bg()
@@ -1216,9 +1219,9 @@ class Edit_Item:
         edit_box.pack_start(frame_settings, False, False)
 
         if is_plugin:
-            if os.access("plugins/conf/%s.py" % command[1:], os.F_OK|os.R_OK):
+            if os.access("plugins/%s/config.py" % command[1:], os.F_OK|os.R_OK):
                 try:
-                    exec("import plugins.conf.%s as plugin_conf" % command[1:])
+                    exec("import plugins.%s.config as plugin_conf" % command[1:])
                     
                     p_box = gtk.VBox()
                     p_box.set_spacing(10)
@@ -1492,27 +1495,56 @@ class PluginMenu:
         self.callback = callback
         self.menu = gtk.Menu()
 
+        self.list_plugins()
         plugins_sort = []
 
-        for plugin in plugins.info:
+        for plugin in self._list:
             plugins_sort.append(plugin)
 
         plugins_sort.sort()
 
         for plugin in plugins_sort:
             item = self.append_menu_item(self.menu, 
-                                         plugins.info[plugin]['desc'], 
-                                         plugins.info[plugin]['icon'])
+                                         self._list[plugin]['Name'], 
+                                         self._list[plugin]['Icon'])
             item.connect("activate", self.callback, plugin)
             item.show()
 
     def create_menu_item(self, label, icon_name, comment):
+        
         item = gtk.ImageMenuItem(label)
         icon_pixbuf = core.get_pixbuf_icon(icon_name)
         item.set_image(gtk.image_new_from_pixbuf(icon_pixbuf))
         return item
 
     def append_menu_item(self, menu, label, icon_name, comment=None):
+        
         item = self.create_menu_item(label, icon_name, comment)
         menu.append(item)
         return item
+
+    def list_plugins(self):
+        
+        self._list = {}
+        for p in os.listdir('plugins'):
+            if '.desktop' in p:
+                plg_name = p[:-8]
+                self._list[plg_name] = {}
+                try:     
+                    f = open('plugins/'+p, 'r')
+                    for line in f:
+                        ## empty or comment ..
+                        if line == '\n' or line[0] == '#':
+                            continue
+
+                        line = line.strip('\n')
+                        line = line.strip()
+                        
+                        tmp = line.split('=', 1)
+                        key = tmp[0].strip()
+                        keyval = tmp[1].strip()
+
+                        self._list[plg_name][key] = keyval
+                    f.close()
+                except:
+                    print 'Error while parsing config file ..'

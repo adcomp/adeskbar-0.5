@@ -29,10 +29,10 @@ DEBUG_WIDGET = 0
 ICON_THEME = gtk.icon_theme_get_default()
 
 class BarManager():
-    """ class App - main bar config/function """
+    """ class - main bar config/function """
     
     def __init__(self, cfg_file):
-        self.logInfo('BarManager init')
+        core.logINFO('init ..', 'BarManager')
         self.cfg_file = cfg_file
         
         ## Init some var.
@@ -61,7 +61,7 @@ class BarManager():
 
     def create_bar(self):
         """ create and configure gtk.Window (bar) """
-        self.logInfo('BarManager create bar')
+        core.logINFO('create bar ..', 'BarManager')
 
         self.win = ui.Window()
         self.win.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DOCK)
@@ -71,7 +71,7 @@ class BarManager():
         self.set_geometry()
 
     def set_geometry(self):
-        self.logInfo('BarManager set geometry')
+        core.logINFO('set geometry ..', 'BarManager')
         
         if self.cfg['fixed_mode']:
             screen_width, screen_height = gtk.gdk.screen_width(), gtk.gdk.screen_height()
@@ -110,7 +110,7 @@ class BarManager():
                                         min_aspect=-1.0, max_aspect=-1.0)
 
     def init_bar_callback(self):
-        self.logInfo('BarManager init bar callback')
+        core.logINFO('init bar callback ..', 'BarManager')
         
         ## Window callback
         self.win.connect("button_press_event", self.bar_released)
@@ -123,13 +123,13 @@ class BarManager():
         self.win.connect("composited-changed", self.composite_changed)
 
     def composite_changed(self, widget):
-        self.logInfo('BarManager composite changed')
+        core.logINFO('composite changed', 'BarManager')
         
         self.is_composited = self.win.is_composited()
         self.update_all()
         
     def update_strut(self, widget):
-        self.logInfo('BarManager update structure')
+        core.logINFO('update structure ..', 'BarManager')
         
         # window need to be realize before change strut
         if widget.window == None:
@@ -185,13 +185,13 @@ class BarManager():
                                           [0,w,0,0])
 
     def win_size_allocate(self, widget, allocation):
-        self.logInfo('BarManager window size allocate')
+        core.logINFO('window size allocate ..', 'BarManager')
         
         self.init_bar_pos()
         self.bar_move()
 
     def restart(self, widget=None):
-        self.logInfo('BarManager restart')
+        core.logINFO('restart', 'BarManager')
         
         self.win.hide()
         for index in self.plg_mgr.plugins:
@@ -214,7 +214,7 @@ class BarManager():
         self.popupMenu.show_all()
 
     def resize_and_seticon(self, data=None):
-        self.logInfo('BarManager resize and seticon')
+        core.logINFO('resize and seticon ..', 'BarManager')
         
         # resize and update icon for all plugins
         for ind in self.plg_mgr.plugins:
@@ -227,10 +227,15 @@ class BarManager():
         return False
 
     def load_config(self):
-        self.logInfo('BarManager load config')
+        core.logINFO('load config', 'BarManager')
         
         ## read config
-        self.cfg, self.launcher, self.drawer = config.read(self.cfg_file)
+        self.configuration = config.Config(self.cfg_file)
+        self.configuration.read()
+        
+        self.cfg = self.configuration.config
+        self.launcher = self.configuration.launcher
+        self.drawer = self.configuration.drawer
         
         if DEBUG:
             print 'CONFIG ---------------------------------------------'
@@ -251,7 +256,8 @@ class BarManager():
         ## If intellihide and wnck loaded
         if self.cfg['auto_hide'] == 2 and not self.wnck:
             # no wnck module ? fallback to autohide
-            core.logINFO('intellihide : no wnck module found .. fallback to autohide', 'bar')
+            core.logINFO('intellihide : no wnck module found ..', 'bar')
+            core.logINFO('-- fallback to autohide')
             self.cfg['auto_hide'] = 1
             self.wnck = None
 
@@ -302,7 +308,7 @@ class BarManager():
         # create a new plugin manager
         self.plg_mgr = pluginmanager.PluginManager(self)
         
-        for ind in self.cfg['ind_launcher']:
+        for ind in self.configuration.l_ind:
             self.plg_mgr.append(ind, self.launcher[ind])
         self.plg_mgr.run()
 
@@ -321,7 +327,7 @@ class BarManager():
         gobject.idle_add(self.reposition)
 
     def set_below_or_above(self):
-        self.logInfo('BarManager set_below_or_above')
+        core.logINFO('set_below_or_above ..', 'BarManager')
         
         if self.cfg['keep_below']:
             self.win.set_keep_below(True)
@@ -331,7 +337,7 @@ class BarManager():
             self.win.set_keep_below(False)
 
     def reposition(self):
-        self.logInfo('BarManager reposition')
+        core.logINFO('reposition ..', 'BarManager')
         
         if self.cfg['fixed_mode']:
             screen_width, screen_height = gtk.gdk.screen_width(), gtk.gdk.screen_height()
@@ -440,23 +446,31 @@ class BarManager():
         cr.set_source_rgba(r, g, b, self.opacity)
         
         if self.cfg['bar_style'] == 0:      # Edgy
-            draw.rounded_rect2(cr, rect, self.cfg['rounded_corner'], self.cfg['position'], fill=True)
+            draw.rounded_rect2(cr, rect, self.cfg['rounded_corner'], 
+                                self.cfg['position'], fill=True)
         elif self.cfg['bar_style'] == 1:    # Floaty
-            draw.rounded_rect(cr, rect, self.cfg['rounded_corner'], self.cfg['position'], fill=True)
+            draw.rounded_rect(cr, rect, self.cfg['rounded_corner'], 
+                                self.cfg['position'], fill=True)
         elif self.cfg['bar_style'] == 2:    # 3d
-            draw.trapeze(cr, rect, self.cfg['rounded_corner'], self.cfg['position'], fill=True)
+            draw.trapeze(cr, rect, self.cfg['rounded_corner'], 
+                                self.cfg['position'], fill=True)
 
         if self.cfg['bg_gradient']:
             r1, g1, b2 = self.cfg['bg_gradient_color_rgb']
-            lg = draw.gradient_color2trans(r1, g1, b2, rect, self.cfg['bg_gradient_alpha']/65535.0, self.cfg['position'], invert=False)
+            lg = draw.gradient_color2trans(r1, g1, b2, rect, 
+                                self.cfg['bg_gradient_alpha']/65535.0, 
+                                self.cfg['position'], invert=False)
             cr.set_source(lg)
 
             if self.cfg['bar_style'] == 0:      # Edgy
-                draw.rounded_rect2(cr, rect, self.cfg['rounded_corner'], self.cfg['position'], fill=True)
+                draw.rounded_rect2(cr, rect, self.cfg['rounded_corner'], 
+                self.cfg['position'], fill=True)
             elif self.cfg['bar_style'] == 1:    # Floaty
-                draw.rounded_rect(cr, rect, self.cfg['rounded_corner'], self.cfg['position'], fill=True)
+                draw.rounded_rect(cr, rect, self.cfg['rounded_corner'], 
+                self.cfg['position'], fill=True)
             elif self.cfg['bar_style'] == 2:    # 3d
-                draw.trapeze(cr, rect, self.cfg['rounded_corner'], self.cfg['position'], fill=True)
+                draw.trapeze(cr, rect, self.cfg['rounded_corner'], 
+                self.cfg['position'], fill=True)
 
         if self.cfg['show_border']:
             r, g, b = self.cfg['border_color_rgb']
@@ -464,14 +478,17 @@ class BarManager():
             rect = rect[0]+1, rect[1]+1, rect[2]-2, rect[3]-2
 
             if self.cfg['bar_style'] == 0:      # Edgy
-                draw.rounded_rect2(cr, rect, self.cfg['rounded_corner'], self.cfg['position'])
+                draw.rounded_rect2(cr, rect, self.cfg['rounded_corner'], 
+                                self.cfg['position'])
             elif self.cfg['bar_style'] == 1:    # Floaty
-                draw.rounded_rect(cr, rect, self.cfg['rounded_corner'], self.cfg['position'])
+                draw.rounded_rect(cr, rect, self.cfg['rounded_corner'], 
+                                self.cfg['position'])
             elif self.cfg['bar_style'] == 2:    # 3d
-                draw.trapeze(cr, rect, self.cfg['rounded_corner'], self.cfg['position'])
+                draw.trapeze(cr, rect, self.cfg['rounded_corner'], 
+                                self.cfg['position'])
 
     def init_bar_pos(self):
-        self.logInfo('BarManager init bar position')
+        core.logINFO('init bar position ..', 'BarManager')
 
         self.bar_width , self.bar_height = self.win.get_size()
         screen_width, screen_height = gtk.gdk.screen_width(), gtk.gdk.screen_height()
@@ -623,7 +640,7 @@ class BarManager():
         return True
 
     def update_all(self):
-        self.logInfo('BarManager update_all')
+        core.logINFO('update_all ..', 'BarManager')
         
         self.init_bar_pos()
         self.set_geometry()
@@ -632,7 +649,7 @@ class BarManager():
         self.update() 
 
     def check_window_state(self):
-        self.logInfo('BarManager check_window_state')
+        core.logINFO('check_window_state ..', 'BarManager')
         
         if not self.init_flag:
             return
@@ -647,7 +664,7 @@ class BarManager():
             self.bar_move()
 
     def bar_move(self):
-        self.logInfo('BarManager bar move')
+        core.logINFO('bar move ..', 'BarManager')
         
         if self.bar_hidden:
             self.win.move(int(self.bar_hide_x), int(self.bar_hide_y))
@@ -657,7 +674,7 @@ class BarManager():
         self.update_strut(self.win)
 
     def toggle_hidden(self, widget=None , event=None):
-        self.logInfo('BarManager toggle_hidden')
+        core.logINFO('toggle_hidden', 'BarManager')
         
         if  self.bar_hidden:
             self.bar_hidden = False
@@ -668,7 +685,7 @@ class BarManager():
             self.check_window_state()
 
     def bar_hide(self):
-        self.logInfo('BarManager bar hide')
+        core.logINFO('bar hide ..', 'BarManager')
         
         if not self.can_hide:
             return
@@ -742,7 +759,7 @@ class BarManager():
         self.mouse_over = True
 
     def bar_released(self, widget, event):
-        self.logInfo('BarManager bar released')
+        core.logINFO('bar released ..', 'BarManager')
         
         ## FIXME! avoid double callback (I don't know why I receive twice)
         if self.last_event_time == event.time:
@@ -773,7 +790,7 @@ class BarManager():
         return False
 
     def edit_config(self, widget):
-        self.logInfo('BarManager edit config')
+        core.logINFO('edit config ..', 'BarManager')
         
         if not self.bar_conf:
             self.bar_conf = barconf.Conf(self)
@@ -781,7 +798,7 @@ class BarManager():
             self.bar_conf.window.present()
 
     def doquit(self, widget=None, data=None):
-        self.logInfo('BarManager quit')
+        core.logINFO('quit ..', 'BarManager')
         
         ## FIXME!! what to do now ? try to close adeskbar nicely ..
         self.win.hide()
@@ -791,7 +808,7 @@ class BarManager():
         gtk.main_quit()
 
     def run(self):
-        self.logInfo('BarManager run')
+        core.logINFO('run ..', 'BarManager')
         try:
             gtk.main()
         except KeyboardInterrupt: 
@@ -799,6 +816,3 @@ class BarManager():
             ## FIXME!! what to do now ? try to close adeskbar nicely ..
             self.doquit()
 
-    def logInfo(self, info):
-        if DEBUG:
-            print '[ADeskbar] %s' % info

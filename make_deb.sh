@@ -68,7 +68,7 @@ log_info "  - copy application"
 cp -a src/* $DIR_TEMP/usr/share/adeskbar/
 cp src/images/adeskbar.png $DIR_TEMP/usr/share/pixmaps/
 cp adeskbar.desktop $DIR_TEMP/usr/share/applications/
-cp adeskbar.sh $DIR_TEMP/usr/bin/adeskbar
+cp src/main.py $DIR_TEMP/usr/bin/adeskbar
 )
 status
 

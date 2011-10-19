@@ -64,7 +64,11 @@ if cfg_file == '--help' or cfg_file == '-h':
 import adesk.bar
 bar_mgr = adesk.bar.BarManager(cfg_file)
 
-### !! if I move this in BarManager.init , no callback .. why ?
+###
+# je ne sais pas pourquoi , mais si je places cette partie dans la classe
+# adesk.bar.BarManager , le callback ne fonctionne pas .. ??
+###
+
 try:
     import gio
     home = os.environ['HOME']

@@ -7,6 +7,7 @@ import re
 import gio
 import glib
 import xdg.Menu
+import xdg.BaseDirectory
 from subprocess import Popen
 
 # Only for debugging : False / True
@@ -21,8 +22,8 @@ def logINFO(msg, from_mod=""):
     if DEBUG:
         mod = ''
         if from_mod:
-            mod = "." + from_mod
-        print ("[ADesk%s] %s" % (mod, msg))
+            mod = "(" + from_mod + ") -- "
+        print ("[adeskbar] %s%s" % (mod, msg))
 
 def launch_command(cmd):
     if cmd != ' ' and cmd != None and len(cmd)!=0:
@@ -32,7 +33,7 @@ def launch_command(cmd):
         try:
             Popen(cmd, shell=True)
         except OSError:
-            pass
+            logINFO("   -- error :  %s" % cmd, 'core')
 
         realpath = os.path.dirname(os.path.realpath( __file__ ))
         os.chdir(realpath + '/..')
@@ -86,6 +87,16 @@ def show_msg(msg=' .. '):
     message = gtk.MessageDialog(None, gtk.DIALOG_MODAL, gtk.MESSAGE_INFO, gtk.BUTTONS_OK, msg)
     resp = message.run()
     message.destroy()
+
+def show_error_dlg(error_string):
+	"""This Function is used to show an error dialog when an error occurs.
+	error_string - The error string that will be displayed 	on the dialog."""
+    
+	error_dlg = gtk.MessageDialog(type=gtk.MESSAGE_ERROR,
+				                  message_format=error_string,
+				                  buttons=gtk.BUTTONS_OK)
+	error_dlg.run()
+	error_dlg.destroy()
 
 def image_button(label, image, size):
     bt = gtk.Button()
@@ -240,17 +251,10 @@ class XdgMenu():
 
             elif isinstance(entry, xdg.Menu.MenuEntry):
                 app = App()
-                #~ de = entry.DesktopEntry
-                #~ name = de.getName()
-                #~ icon = de.getIcon()
-                #~ comment = de.getComment()
-                #~ ex = de.getExec()
-                #~ terminal = de.getTerminal()
                 de = entry.DesktopEntry
                 app.Name = de.getName()
                 app.Icon = de.getIcon()
                 app.Comment = de.getComment()
                 app.Exec = de.getExec()
                 app.Terminal = de.getTerminal()
-                #~ self.applications[self.category][1].append((name,icon,ex,comment,terminal))
                 self.applications[self.category][1].append(app)

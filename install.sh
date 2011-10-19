@@ -2,8 +2,8 @@
 
 ##
 #  Install ADeskBar
-#  by ADcomp <david.madbox@gmail.com>
-#  http://www.ad-comp.be/
+## David [a.k.a] ADcomp < david.madbox@gmail.com >
+## http://www.adeskbar.tuxfamily.org/
 ##
 
 ## remove *.pyc
@@ -17,4 +17,4 @@ cp -a src/*  /usr/share/adeskbar
 chown -R root: /usr/share/adeskbar
 cp src/images/adeskbar.png /usr/share/pixmaps
 cp adeskbar.desktop /usr/share/applications
-cp adeskbar.sh /usr/bin/adeskbar
+cp src/main.py /usr/bin/adeskbar

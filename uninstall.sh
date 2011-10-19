@@ -2,8 +2,8 @@
 
 ##
 #  unInstall ADeskBar
-#  by ADcomp <david.madbox@gmail.com>
-#  http://www.ad-comp.be/
+## David [a.k.a] ADcomp < david.madbox@gmail.com >
+## http://www.adeskbar.tuxfamily.org/
 ##
 
 rm -rf /usr/share/adeskbar
