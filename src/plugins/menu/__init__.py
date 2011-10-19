@@ -33,7 +33,7 @@ class EventHandler(pyinotify.ProcessEvent):
     def set_timer(self):
         if not self.timer == None:
             gobject.source_remove(self.timer)
-        self.timer = gobject.timeout_add(5000, self.on_timeout_notify)
+        self.timer = gobject.timeout_add(4000, self.on_timeout_notify)
 
     def on_timeout_notify(self):
         self.timer = None
@@ -75,8 +75,8 @@ class Menu_UI(UI.PopupWindow):
         
         self.mainbox = gtk.HBox()
         self.mainbox.show()
-        self.mainbox.set_spacing(1)
-        self.mainbox.set_border_width(1)
+        self.mainbox.set_spacing(2)
+        self.mainbox.set_border_width(2)
         self.add(self.mainbox)
         self.restart()
         
@@ -142,7 +142,13 @@ class Menu_UI(UI.PopupWindow):
                         txt_label = app.Name + '\n' + app.Exec
                     else:
                         txt_label = app.Name 
-                        txt_label += '\n<small>' + app.Comment + '</small>'
+                        if app.Comment == '' or app.Comment == ' ':
+                            comment = '--'
+                        elif len(app.Comment) > 50:
+                            comment == app.Comment[:50] + '..'
+                        else:
+                            comment = app.Comment
+                        txt_label += '\n<small>' + comment + '</small>'
 
                     button = Core.image_button(txt_label, app.Icon, 24)
                     button.connect("button-release-event", self.executeAction, app)
