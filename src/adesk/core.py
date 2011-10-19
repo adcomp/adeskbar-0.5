@@ -7,7 +7,7 @@ import re
 import gio
 import glib
 import xdg.Menu
-import xdg.BaseDirectory
+from xdg import BaseDirectory
 from subprocess import Popen
 
 # Only for debugging : False / True
