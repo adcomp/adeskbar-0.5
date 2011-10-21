@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+#
+# ADeskBar - "Terminal" plugin
+#
+##
 
 import gtk
 import vte
@@ -15,10 +19,10 @@ except:
     Core.logINFO(' -- debian/ubuntu : "sudo apt-get install python-vte"')
 
 class Plugin(Plg.Plugin):
+    
     def __init__(self, bar, settings):
         Plg.Plugin.__init__(self, bar, settings)
-        self.can_zoom = True
-        self.settings = settings
+
         self.terminal = Terminal(self, bar)
 
     def onClick(self, widget, event):
@@ -51,7 +55,8 @@ class Terminal(UI.PopupWindow):
         self.set_from_config()
 
     def set_from_config(self):
-        self.box.set_size_request(int(self.plugin.settings['width']), int(self.plugin.settings['height']))
+        self.box.set_size_request(int(self.plugin.settings['width']), 
+                                  int(self.plugin.settings['height']))
         self.init_terminal()
         
         self._vte.set_font_from_string(self.plugin.settings['font'])

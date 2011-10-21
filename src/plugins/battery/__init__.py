@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+#
+# ADeskBar - "Battery" plugin
+#
+##
 
 import gtk
 import gobject
@@ -12,7 +16,7 @@ import adesk.ui as UI
 class Plugin(Plg.Plugin):
     def __init__(self, bar, settings):
         Plg.Plugin.__init__(self, bar, settings)
-        self.settings = settings
+
         self.can_zoom = True
         self.battery = Battery(self, bar)
 
@@ -26,8 +30,6 @@ class Plugin(Plg.Plugin):
 class Battery(UI.PopupWindow):
     def __init__(self, plugin, bar):
         UI.PopupWindow.__init__(self, bar, plugin)
-        self.bar = bar
-        self.plugin = plugin
 
         box = gtk.HBox(False, 4)
         box.set_border_width(2)

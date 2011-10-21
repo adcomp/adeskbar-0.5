@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
+#
+#   ADeskBar - "Places" plugin
+#   Thanks to : FSnow - fix bug : urllib.unquote (éèà...)
+##
 
 import gtk
 import os
+import urllib
 
 import adesk.plugin as Plg
 import adesk.core as Core
@@ -9,10 +14,6 @@ import adesk.core as Core
 class Plugin(Plg.Plugin):
     def __init__(self, bar, settings):
         Plg.Plugin.__init__(self, bar, settings)
-        self.settings = settings
-        self.bar = bar
-        self.can_zoom = True
-        self.places = Places(self)
 
     def onClick(self, widget, event):
 
@@ -41,6 +42,8 @@ class Plugin(Plg.Plugin):
             icon_y = min(icon_y, screen_height - menu_size[1])
 
             return (icon_x, icon_y, False)
+            
+        self.places = Places(self)
         self.places.menu.popup(None, None, get_position, 0, 0)
         self.is_visible = True
 
@@ -56,12 +59,35 @@ class Places():
 
         home = os.environ['HOME']
         
+        ### add Home and / (filesystem)
         item = self.append_menu_item(self.menu, 'Home', 'user-home')
         item.connect("activate", self.open, home)
         
         item = self.append_menu_item(self.menu, 'File System', 'drive-harddisk')
         item.connect("activate", self.open, '/')
 
+
+        ### mounted device : parse /proc/mounts
+        mount = []
+        
+        f = open('/proc/mounts', 'r')
+
+        for l in f:
+            if l[0] == '/':
+                l = l.split()
+                if not l[1] == '/':
+                    mount.append(l[1])
+        f.close()
+        
+        if not len(mount) == 0:
+            separator = gtk.SeparatorMenuItem()
+            self.menu.append(separator)
+            separator.show()
+            
+            for d in mount:
+                item = self.append_menu_item(self.menu, d, 'drive-harddisk')
+
+        ### .gtk-bookmarks - parse user bookmarks
         if os.access("%s/.gtk-bookmarks" % home, os.F_OK|os.R_OK):
 
             separator = gtk.SeparatorMenuItem()
@@ -83,22 +109,18 @@ class Places():
                         bm_path = tmp[0].strip(' ')
                         label = tmp[0].split('/')[-1]
 
-                    item = self.append_menu_item(self.menu, label, 'folder')
+                    item = self.append_menu_item(self.menu, urllib.unquote(label), 'folder')
                     item.connect("activate", self.open, bm_path)
             f.close()
 
     def create_menu_item(self, label, icon_name, comment):
         item = gtk.ImageMenuItem(label)
         item.set_use_underline(0)
-        
-        if gtk.gtk_version >= (2, 16, 0):
-            item.props.always_show_image = True
+        #~ item.props.always_show_image = True
             
         icon_pixbuf = Core.get_pixbuf_icon(icon_name)
         item.set_image(gtk.image_new_from_pixbuf(icon_pixbuf))
-        
-        if comment is not None:
-            item.set_tooltip_text(comment)
+
         return item
 
     def append_menu_item(self, menu, label, icon_name, comment=None):
@@ -108,11 +130,7 @@ class Places():
         return item
 
     def open(self, widget, path):
-        ## FIXME !!  this is a quick hack! do it better !!
-        tmp_path = path.replace('%20', ' ')
-        tmp_path = tmp_path.replace('%C3%A9', 'é')
-        tmp_path = tmp_path.replace('%C3%A8', 'è')
-        Core.launch_command('%s "%s"' % (self.plugin.settings['filemanager'], tmp_path))
+        Core.launch_command('%s "%s"' % (self.plugin.settings['filemanager'], urllib.unquote(path)))
 
     def menu_deactivate(self, widget):
         self.plugin.is_visible = False

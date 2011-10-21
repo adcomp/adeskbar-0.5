@@ -13,8 +13,6 @@ ID_NAME = 1
 ID_CMD = 2
 ID_IMG = 3
 
-settings = {'launcher':[]}
-
 class config():
     def __init__(self, box, conf, ind):
 
@@ -111,9 +109,7 @@ class config():
 
     def save_change(self):
         
-        # XXX! FixMe !! why 2 tab ? need to modify this buggy code :(
         self.conf.drawer[self.ind] = []
-        #~ self.conf.plg_mgr.plugins[self.ind].settings['launcher'] = []
         
         model = self.view.get_model()
         iter = model.get_iter_root()
@@ -124,7 +120,6 @@ class config():
             cmd = model.get_value(iter, ID_CMD)
             
             self.conf.drawer[self.ind].append((cmd, icon, name))
-            #~ self.conf.plg_mgr.plugins[self.ind].settings['launcher'].append((cmd, icon, name))
 
             iter = model.iter_next(iter)
 

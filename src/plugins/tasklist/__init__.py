@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+#
+# ADeskBar - "Task list" plugin
+#
+##
 
 import os
 import time
@@ -22,11 +26,12 @@ def_settings = {
     }
 
 class Plugin(Plg.PluginContainer):
+    
     def __init__(self, bar, settings):
         Plg.PluginContainer.__init__(self, bar, settings)
+        
         self.can_zoom = False
         self.can_show_icon = False
-        self.bar = bar
 
         ## FIXME!!
         for key in def_settings:

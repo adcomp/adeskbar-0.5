@@ -110,9 +110,6 @@ class PluginManager:
             if launcher['cmd'][1:] == 'separator':
                 is_separator = True
 
-            elif launcher['cmd'][1:] == 'drawer' and index in self.bar.drawer:
-                    launcher['launcher'] = self.bar.drawer[index]
-
         widget = self.load_plugin(index, launcher, is_plugin)
 
         if widget: # load OK
@@ -142,6 +139,7 @@ class PluginManager:
 
     def remove(self, index):
         self.index.remove(index)
+        self.bar.launcher.pop(index)
         self.plugins[index].hide()
         self.plugins[index].destroy()
         self.plugins.pop(index)

@@ -1,17 +1,20 @@
 # -*- coding: utf-8 -*-
+#
+# ADeskBar - "Window List" plugin
+#
+##
 
 import gtk
 import wnck
 import time
 
 import adesk.plugin as Plg
+import adesk.core as Core
 
 class Plugin(Plg.Plugin):
+    
     def __init__(self, bar, settings):
         Plg.Plugin.__init__(self, bar, settings)
-        self.settings = settings
-        self.bar = bar
-        self.can_zoom = True
 
         # Wnck 
         self.wnck = Wnck()
@@ -134,6 +137,7 @@ class Plugin(Plg.Plugin):
 
 
 class Wnck:
+    
     def __init__(self):
 
         # silently ignore x errors
@@ -142,17 +146,4 @@ class Wnck:
         # init screen and hook into WnckSceen's events
         self.screen = wnck.screen_get_default()
         self.screen.force_update()
-        self.screen.connect("window_opened", self.window_opened)
-
-    def window_opened(self, screen, window):
-        return
         
-        timestamp = int(time.time())
-
-        wsp = window.get_workspace()
-        active_wsp = self.screen.get_active_workspace()
-        
-        if not wsp == active_wsp:
-            if wsp:
-                wsp.activate(timestamp)
-        window.activate(timestamp)

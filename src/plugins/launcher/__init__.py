@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
-
-import gtk
+#
+# ADeskBar - "Launcher" plugin
+#
+##
 
 import adesk.plugin as Plg
 import adesk.core as Core
-import adesk.ui as UI
 
 class Plugin(Plg.Plugin):
     def __init__(self, bar, settings):
         Plg.Plugin.__init__(self, bar, settings)
-        self.can_zoom = True
 
     def onClick(self, widget, event):
         Core.launch_command(self.settings['cmd'])

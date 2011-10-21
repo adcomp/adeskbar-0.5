@@ -1,4 +1,8 @@
-# adesk Systray plugin
+# -*- coding: utf-8 -*-
+#
+# ADeskBar - "Places" plugin
+#
+##
 
 # INFO:
 # - Uses some code from pyPanel
@@ -34,13 +38,12 @@ ICONSIZE = 24
 CUSTOM_Y = 2
 
 class Plugin(Plg.PluginContainer):
+    
     def __init__(self, bar, settings):
         Plg.PluginContainer.__init__(self, bar, settings)
+
         self.can_zoom = False
         self.can_show_icon = False
-        self.settings = settings
-        self.bar = bar
-        self.cfg = bar.cfg
 
         global BG_COLOR
         BG_COLOR = bar.cfg['background_color']
@@ -62,6 +65,7 @@ class Plugin(Plg.PluginContainer):
             self.set_size_request(self.cfg['icon_size'], -1)
 
 class Obj(object):
+    
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 

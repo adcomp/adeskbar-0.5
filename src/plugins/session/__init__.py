@@ -17,8 +17,6 @@ session = { 'logout':('Log Out','log out the session.', 'gnome-session-logout'),
 class Plugin(Plg.Plugin):
     def __init__(self, bar, settings):
         Plg.Plugin.__init__(self, bar, settings)
-        self.settings = settings
-        self.can_zoom = True
         
         # FIXME !! new in v0.3.9
         if not 'show_label' in self.settings:
@@ -48,7 +46,6 @@ class Session(UI.PopupWindow):
 
     def __init__(self, plugin, bar):
         UI.PopupWindow.__init__(self, bar, plugin)
-        self.plugin = plugin
         
         self.box = gtk.VBox(False, 0)
         self.box.set_border_width(0)

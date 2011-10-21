@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
+#
+# ADeskBar - "Simple Menu" plugin
+#
+##
 
 import gtk
+import gobject
 
 try:
     import pyinotify
@@ -12,7 +17,6 @@ import adesk.plugin as Plg
 import adesk.ui as UI
 import adesk.core as Core
 
-import gobject
 gobject.threads_init()
 
 class EventHandler(pyinotify.ProcessEvent):
@@ -32,7 +36,7 @@ class EventHandler(pyinotify.ProcessEvent):
     def set_timer(self):
         if not self.timer == None:
             gobject.source_remove(self.timer)
-        self.timer = gobject.timeout_add(5000, self.on_timeout_notify)
+        self.timer = gobject.timeout_add(4000, self.on_timeout_notify)
 
     def on_timeout_notify(self):
         self.timer = None
@@ -41,11 +45,10 @@ class EventHandler(pyinotify.ProcessEvent):
         return False
         
 class Plugin(Plg.Plugin):
+
     def __init__(self, bar, settings):
         Plg.Plugin.__init__(self, bar, settings)
-        self.settings = settings
-        self.bar = bar
-        self.can_zoom = True
+
         self.menu = UI.Menu(self.launch_app)
         self.menu.menu.connect('deactivate', self.menu_deactivate)
 

@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+#
+# ADeskBar - "Menu" plugin
+#
+##
 
 import gtk
 
@@ -44,8 +48,7 @@ class EventHandler(pyinotify.ProcessEvent):
 class Plugin(Plg.Plugin):
     def __init__(self, bar, settings):
         Plg.Plugin.__init__(self, bar, settings)
-        self.bar = bar
-        self.settings = settings
+
         self.can_zoom = True
         self.menu = Menu_UI(self, bar)
 
@@ -73,11 +76,15 @@ class Menu_UI(UI.PopupWindow):
         self.nbook = None
         self.catbox = None
         
+        box = gtk.VBox()
+        
         self.mainbox = gtk.HBox()
         self.mainbox.show()
         self.mainbox.set_spacing(2)
         self.mainbox.set_border_width(2)
-        self.add(self.mainbox)
+        
+        box.pack_start(self.mainbox, False, False)
+        self.add(box)
         self.restart()
         
         if NOTIFY:

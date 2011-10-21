@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+#
+# ADeskBar - "Volume" plugin
+#
+##
 
 # INFO:
 # - Uses some code from Volti
@@ -18,9 +22,9 @@ except:
 INC = 5
 
 class Plugin(Plg.Plugin):
+    
     def __init__(self, bar, settings):
         Plg.Plugin.__init__(self, bar, settings)
-        self.settings = settings
 
         ## FIXME!! check if settings for card_index/control
         if not 'card_index' in self.settings: self.settings['card_index']=0

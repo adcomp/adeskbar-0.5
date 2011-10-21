@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+#
+# ADeskBar - "DigiClock" plugin
+#
+##
 
 import gtk
 import pango
@@ -15,10 +19,9 @@ def_settings = {
 class Plugin(Plg.PluginContainer):
     def __init__(self, bar, settings):
         Plg.PluginContainer.__init__(self, bar, settings)
+
         self.can_zoom = False
         self.can_show_icon = False
-        self.settings = settings
-        self.bar = bar
 
         self.locked = False
 

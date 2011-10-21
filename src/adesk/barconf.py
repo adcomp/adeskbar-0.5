@@ -23,9 +23,6 @@ import config
 import ui
 import release
 
-## Test
-#~ import check
-
 ## Translation
 locale.setlocale(locale.LC_ALL, '')
 #~ gettext.install('adeskbar', './locale', unicode=1)
@@ -156,9 +153,9 @@ class Conf():
         ## Main Controls
         
         # test
-        #~ button_refresh = gtk.Button(stock=gtk.STOCK_PROPERTIES)
-        #~ button_refresh.connect("clicked", self.my_test)
-        #~ BoxControls.pack_end(button_refresh, False, False)
+        button_refresh = gtk.Button(stock=gtk.STOCK_PROPERTIES)
+        button_refresh.connect("clicked", self.my_test)
+        BoxControls.pack_end(button_refresh, False, False)
         
         # About
         self.bt_about = gtk.Button(stock=gtk.STOCK_ABOUT)
@@ -189,10 +186,13 @@ class Conf():
         self.window.show_all()
 
     def my_test(self, widget=None):
-        for ind in self.bar.configuration.l_ind:
-            print 'a) ', self.bar.configuration.launcher[ind]
-            print 'b) ', self.launcher[ind]
-            print 
+        print self.bar.configuration.l_ind
+        print 
+        print self.bar.configuration.launcher
+        
+        # for ind in self.bar.configuration.l_ind:
+        #    print self.launcher[ind]
+        #    print 
 
     def switch_page(self, flag_edit=False):
         if self.nbook.get_current_page() == 2 or flag_edit:
@@ -894,7 +894,7 @@ class Conf():
                 self.plg_mgr.plugins[index].on_init()
             else:
                 self.remove_item(None)
-                self.bar.configuration.l_ind.remove(index)
+                self.plg_mgr.index.remove(index)
                 self.launcher.pop(index)
 
     def new_item_menu(self, widget, app):
@@ -937,6 +937,10 @@ class Conf():
 
     def destroy(self, widget=None, data=None):
         ## save change
+        
+        # FIXME!! normalement plg_mgr == configuration.l_ind
+        # mais l_ind n'est plus synchro !? .. ca fonctionnnait avant
+        self.bar.configuration.l_ind = self.plg_mgr.index
         self.bar.configuration.save()
         ## and clear conf .. 
         self.bar.bar_conf = None
@@ -1413,7 +1417,7 @@ class View(gtk.TreeView):
             try:
                 self.conf.plg_mgr.remove(index)
             except:
-                pass
+                core.logINFO('error when remove : %s' % index)                
 
             model.remove(model.get_iter(pos))
 

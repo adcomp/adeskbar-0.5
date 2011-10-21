@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+#
+# ADeskBar - "Hello" plugin
+#
+##
 
 import gtk
 
@@ -9,7 +13,7 @@ import adesk.ui as UI
 class Plugin(Plg.Plugin):
     def __init__(self, bar, settings):
         Plg.Plugin.__init__(self, bar, settings)
-        self.settings = settings
+
         self.can_zoom = True
         self.hello = Hello(self, bar)
 
