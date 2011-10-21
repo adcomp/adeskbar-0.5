@@ -11,7 +11,7 @@ from xdg import BaseDirectory
 from subprocess import Popen
 
 # Only for debugging : False / True
-DEBUG = 1
+DEBUG = 0
 
 ICON_THEME = gtk.icon_theme_get_default()
 

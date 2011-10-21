@@ -153,9 +153,9 @@ class Conf():
         ## Main Controls
         
         # test
-        button_refresh = gtk.Button(stock=gtk.STOCK_PROPERTIES)
-        button_refresh.connect("clicked", self.my_test)
-        BoxControls.pack_end(button_refresh, False, False)
+        #~ button_refresh = gtk.Button(stock=gtk.STOCK_PROPERTIES)
+        #~ button_refresh.connect("clicked", self.my_test)
+        #~ BoxControls.pack_end(button_refresh, False, False)
         
         # About
         self.bt_about = gtk.Button(stock=gtk.STOCK_ABOUT)

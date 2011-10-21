@@ -10,8 +10,8 @@ import adesk.plugin as Plg
 import adesk.core as Core
 import adesk.ui as UI
 
-
 class Plugin(Plg.Plugin):
+
     def __init__(self, bar, settings):
         Plg.Plugin.__init__(self, bar, settings)
 
@@ -24,9 +24,12 @@ class Plugin(Plg.Plugin):
         self.set_size_request(self.cfg['icon_size'], self.cfg['icon_size'])
 
 class SearchWindow(UI.PopupWindow):
+
     def __init__(self, plugin, bar):
         UI.PopupWindow.__init__(self, bar, plugin)
 
+        self.connect ("key-press-event", self.on_key_press_event)
+        
         box = gtk.HBox(False, 4)
         box.set_border_width(2)
         self.add(box)
@@ -39,19 +42,9 @@ class SearchWindow(UI.PopupWindow):
         self.entry.connect("activate", self.go)
         box.pack_start(self.entry, True)
 
-        btn = gtk.Button()
-        btn.set_name("EdgeButton")
+        btn = Core.image_button(None, 'images/plugins/searchbox.png', 24)
         btn.connect("clicked", self.go)
-        #~ btn.set_label("Search")
-        btn.set_relief(gtk.RELIEF_NONE)
-        btn.set_border_width(0)
         btn.set_focus_on_click(False)
-        btn.set_property('can-focus', False)
-
-        image = gtk.Image()
-        pixbuf = Core.pixbuf_from_file('images/plugins/searchbox.png', 24, 24)
-        image.set_from_pixbuf(pixbuf)
-        btn.add(image)
 
         box.pack_end(btn, False)
         box.show_all()
@@ -78,3 +71,8 @@ class SearchWindow(UI.PopupWindow):
     def toggle(self, widget = 0):
         UI.PopupWindow.toggle(self)
         self.fixFocus()
+
+    # Quit when Escape key is pressed
+    def on_key_press_event(self, widget, event):
+        if event.hardware_keycode == 9: # Escape 
+            self.toggle()
