@@ -20,8 +20,10 @@ def check_screen(widget):
     widget.set_colormap(colormap)
 
 class Window(gtk.Window):
+    
     def __init__(self, wtype = gtk.WINDOW_TOPLEVEL):
         gtk.Window.__init__(self, wtype)
+        
         self.set_resizable(False)
         self.set_decorated(False)
         self.set_skip_taskbar_hint(True)
@@ -40,8 +42,10 @@ class Window(gtk.Window):
         return True
 
 class TooltipWindow(Window):
+    
     def __init__(self, bar, border = 4):
         Window.__init__(self, gtk.WINDOW_POPUP)
+        
         self.connect('expose-event', self.expose)
         
         self.bar = bar
@@ -197,6 +201,7 @@ class TooltipWindow(Window):
         return False
 
 class PopupWindow(Window):
+    
     def __init__(self, bar, plugin, border = 4):
         Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 
@@ -406,6 +411,7 @@ class PopupWindow(Window):
 
 
 class EmbeddedWindow(Window):
+    
     def __init__(self, bar, border = 4):
         Window.__init__(self, gtk.WINDOW_TOPLEVEL)
 

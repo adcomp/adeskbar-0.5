@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+#
+# ADeskBar - "Session" plugin
+#
+##
 
 import gtk
 

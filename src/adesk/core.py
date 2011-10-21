@@ -98,15 +98,16 @@ def show_error_dlg(error_string):
 	error_dlg.run()
 	error_dlg.destroy()
 
-def image_button(label, image, size):
+def image_button(label, image, size, border=4):
     bt = gtk.Button()
     bt.set_relief(gtk.RELIEF_NONE)
     bt.set_border_width(0)
     bt.set_focus_on_click(False)
     bt.set_property('can-focus', False)
 
-    box = gtk.HBox(False, 6)
-    box.set_border_width(2)
+    box = gtk.HBox(False, border)
+    box.set_border_width(int(border/2))
+    box.set_spacing(border*2)
     box.show()
 
     if image == None:

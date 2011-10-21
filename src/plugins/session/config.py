@@ -1,5 +1,7 @@
 import gtk
 
+import adesk.core as Core
+
 settings = {
     'lockscreen':'xscreensaver-command -lock',
     'logout':'openbox --exit',
@@ -40,62 +42,62 @@ class config():
 
         table = gtk.Table()
 
-        label = gtk.Label("Lock screen  :")
-        label.set_alignment(0, 0.5)
+        img = gtk.Image()
+        Core.set_icon('system-lock-screen', img, size=32)
         self.lockscreen = gtk.Entry()
         self.lockscreen.set_width_chars(45)
         self.lockscreen.set_text(conf.launcher[ind]['lockscreen'])
 
-        table.attach(label, 0, 1, 0, 1)
+        table.attach(img, 0, 1, 0, 1)
         table.attach(self.lockscreen, 1, 2, 0, 1)
 
-        label = gtk.Label("Log Out  :")
-        label.set_alignment(0, 0.5)
+        img = gtk.Image()
+        Core.set_icon('gnome-session-logout', img, size=32)
         self.logout = gtk.Entry()
         self.logout.set_width_chars(45)
         self.logout.set_text(conf.launcher[ind]['logout'])
 
-        table.attach(label, 0, 1, 1, 2)
+        table.attach(img, 0, 1, 1, 2)
         table.attach(self.logout, 1, 2, 1, 2)
 
 
-        label = gtk.Label("Hibernate  :")
-        label.set_alignment(0, 0.5)
+        img = gtk.Image()
+        Core.set_icon('gnome-session-hibernate', img, size=32)
         self.hibernate = gtk.Entry()
         self.hibernate.set_width_chars(45)
         self.hibernate.set_text(conf.launcher[ind]['hibernate'])
 
-        table.attach(label, 0, 1, 2, 3)
+        table.attach(img, 0, 1, 2, 3)
         table.attach(self.hibernate, 1, 2, 2, 3)
 
 
-        label = gtk.Label("Suspend  :")
-        label.set_alignment(0, 0.5)
+        img = gtk.Image()
+        Core.set_icon('gnome-session-suspend', img, size=32)
         self.suspend = gtk.Entry()
         self.suspend.set_width_chars(45)
         self.suspend.set_text(conf.launcher[ind]['suspend'])
 
-        table.attach(label, 0, 1, 3, 4)
+        table.attach(img, 0, 1, 3, 4)
         table.attach(self.suspend, 1, 2, 3, 4)
 
 
-        label = gtk.Label("Reboot  :")
-        label.set_alignment(0, 0.5)
+        img = gtk.Image()
+        Core.set_icon('gnome-session-reboot', img, size=32)
         self.reboot = gtk.Entry()
         self.reboot.set_width_chars(45)
         self.reboot.set_text(conf.launcher[ind]['reboot'])
 
-        table.attach(label, 0, 1, 4, 5)
+        table.attach(img, 0, 1, 4, 5)
         table.attach(self.reboot, 1, 2, 4, 5)
 
 
-        label = gtk.Label("Shutdown  :")
-        label.set_alignment(0, 0.5)
+        img = gtk.Image()
+        Core.set_icon('gnome-session-halt', img, size=32)
         self.shutdown = gtk.Entry()
         self.shutdown.set_width_chars(45)
         self.shutdown.set_text(conf.launcher[ind]['shutdown'])
 
-        table.attach(label, 0, 1, 5, 6)
+        table.attach(img, 0, 1, 5, 6)
         table.attach(self.shutdown, 1, 2, 5, 6)
         
 
