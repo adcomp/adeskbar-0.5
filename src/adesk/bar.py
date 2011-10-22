@@ -490,8 +490,8 @@ class BarManager():
     def init_bar_pos(self):
         core.logINFO('init bar position ..', 'BarManager')
 
-        self.bar_width , self.bar_height = self.win.get_size()
-        screen_width, screen_height = gtk.gdk.screen_width(), gtk.gdk.screen_height()
+        self.bar_width , self.bar_height = self.get_size()
+        screen_width, screen_height = self.get_screen_size()
 
         if not self.is_composited:
             bar_size = 1
@@ -816,3 +816,10 @@ class BarManager():
             ## FIXME!! what to do now ? try to close adeskbar nicely ..
             self.doquit()
 
+
+
+    def get_screen_size(self):
+        return gtk.gdk.screen_width(), gtk.gdk.screen_height()
+        
+    def get_size(self):
+        return self.win.get_size()

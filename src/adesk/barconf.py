@@ -147,25 +147,25 @@ class Conf():
         self.frame_iconView.add(iconView)
         
         # Containers
-        BoxControls = gtk.HBox()
-        BoxControls.set_spacing(4)
+        self.ctrlbox = gtk.HBox()
+        self.ctrlbox.set_spacing(4)
 
         ## Main Controls
         
         # test
         #~ button_refresh = gtk.Button(stock=gtk.STOCK_PROPERTIES)
         #~ button_refresh.connect("clicked", self.my_test)
-        #~ BoxControls.pack_end(button_refresh, False, False)
+        #~ self.ctrlbox.pack_end(button_refresh, False, False)
         
         # About
         self.bt_about = gtk.Button(stock=gtk.STOCK_ABOUT)
         self.bt_about.connect("clicked", self.switch_about)
-        BoxControls.pack_start(self.bt_about, False, False)
+        self.ctrlbox.pack_start(self.bt_about, False, False)
         
         # Exit
         button = gtk.Button(stock=gtk.STOCK_CLOSE)
         button.connect("clicked", self.close_and_save)
-        BoxControls.pack_end(button, False, False)
+        self.ctrlbox.pack_end(button, False, False)
 
         self.ui_Preferences()
         self.ui_Position()
@@ -179,7 +179,7 @@ class Conf():
         BoxBase.pack_start(self.frame_iconView, False)
         BoxBase.pack_start(self.nbook, True)
         BoxBase.pack_start(gtk.HSeparator(), False)
-        BoxBase.pack_end(BoxControls, False)
+        BoxBase.pack_end(self.ctrlbox, False)
 
         self.window.add(BoxBase)
         self.window.resize(450, 400)
@@ -197,11 +197,11 @@ class Conf():
     def switch_page(self, flag_edit=False):
         if self.nbook.get_current_page() == 2 or flag_edit:
             self.frame_iconView.hide()
-            self.bt_about.hide()
+            self.ctrlbox.hide()
             self.nbook.set_current_page(-1)
         else:
             self.frame_iconView.show()
-            self.bt_about.show()
+            self.ctrlbox.show()
             self.nbook.set_current_page(2)
 
     def switch_about(self, widget=None):
@@ -1151,10 +1151,10 @@ class Edit_Item:
         edit_box.set_border_width(5)       
         
         frame_settings = gtk.Frame()
-        frame_settings.set_border_width(5)
+        frame_settings.set_border_width(4)
 
         box_settings = gtk.HBox(False, 0)
-        box_settings.set_border_width(5)
+        box_settings.set_border_width(4)
         box_settings.set_spacing(10)
         frame_settings.add(box_settings)
 
@@ -1228,8 +1228,8 @@ class Edit_Item:
                     exec("import plugins.%s.config as plugin_conf" % command[1:])
                     
                     p_box = gtk.VBox()
-                    p_box.set_spacing(10)
-                    p_box.set_border_width(5)
+                    p_box.set_spacing(4)
+                    p_box.set_border_width(4)
                     edit_box.pack_start(p_box, True, True)
                     
                     self.plugin_conf = plugin_conf.config(p_box, self.conf, self.ind)

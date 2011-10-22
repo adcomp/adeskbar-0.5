@@ -39,7 +39,6 @@ class Window(gtk.Window):
         
     def on_close(self, widget, data=None):
         pass
-        return True
 
 class TooltipWindow(Window):
     

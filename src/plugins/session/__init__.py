@@ -59,9 +59,7 @@ class Session(UI.PopupWindow):
         self.create_session_button()
 
     def create_session_button(self):
-        for action in ('lockscreen','logout','hibernate','suspend',
-                       'reboot','shutdown'):
-                           
+        for action in ('lockscreen', 'logout', 'reboot', 'shutdown', 'hibernate', 'suspend'):
             if not self.plugin.settings[action] == '':
                 
                 if self.plugin.settings['show_label']:

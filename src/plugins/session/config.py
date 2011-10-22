@@ -41,77 +41,49 @@ class config():
         optionbox.pack_end(label, False, False)
 
         table = gtk.Table()
-
-        img = gtk.Image()
-        Core.set_icon('system-lock-screen', img, size=32)
-        self.lockscreen = gtk.Entry()
-        self.lockscreen.set_width_chars(45)
-        self.lockscreen.set_text(conf.launcher[ind]['lockscreen'])
-
-        table.attach(img, 0, 1, 0, 1)
-        table.attach(self.lockscreen, 1, 2, 0, 1)
-
-        img = gtk.Image()
-        Core.set_icon('gnome-session-logout', img, size=32)
-        self.logout = gtk.Entry()
-        self.logout.set_width_chars(45)
-        self.logout.set_text(conf.launcher[ind]['logout'])
-
-        table.attach(img, 0, 1, 1, 2)
-        table.attach(self.logout, 1, 2, 1, 2)
-
-
-        img = gtk.Image()
-        Core.set_icon('gnome-session-hibernate', img, size=32)
-        self.hibernate = gtk.Entry()
-        self.hibernate.set_width_chars(45)
-        self.hibernate.set_text(conf.launcher[ind]['hibernate'])
-
-        table.attach(img, 0, 1, 2, 3)
-        table.attach(self.hibernate, 1, 2, 2, 3)
-
-
-        img = gtk.Image()
-        Core.set_icon('gnome-session-suspend', img, size=32)
-        self.suspend = gtk.Entry()
-        self.suspend.set_width_chars(45)
-        self.suspend.set_text(conf.launcher[ind]['suspend'])
-
-        table.attach(img, 0, 1, 3, 4)
-        table.attach(self.suspend, 1, 2, 3, 4)
-
-
-        img = gtk.Image()
-        Core.set_icon('gnome-session-reboot', img, size=32)
-        self.reboot = gtk.Entry()
-        self.reboot.set_width_chars(45)
-        self.reboot.set_text(conf.launcher[ind]['reboot'])
-
-        table.attach(img, 0, 1, 4, 5)
-        table.attach(self.reboot, 1, 2, 4, 5)
-
-
-        img = gtk.Image()
-        Core.set_icon('gnome-session-halt', img, size=32)
-        self.shutdown = gtk.Entry()
-        self.shutdown.set_width_chars(45)
-        self.shutdown.set_text(conf.launcher[ind]['shutdown'])
-
-        table.attach(img, 0, 1, 5, 6)
-        table.attach(self.shutdown, 1, 2, 5, 6)
+        ligne = 0
         
+        cmd = {'lockscreen':('Lock screen', 'system-lock-screen'),
+               'logout':('Log out', 'gnome-session-logout'),
+               'hibernate':('Hibernate', 'gnome-session-hibernate'),
+               'suspend':('Suspend', 'gnome-session-suspend'),
+               'reboot':('Reboot', 'gnome-session-reboot'),
+               'shutdown':('Shutdown', 'gnome-session-halt')
+               }
+               
+        self.widget_cmd = {}
+
+        for key in ('lockscreen', 'logout', 'reboot', 'shutdown', 'hibernate', 'suspend'):
+
+            label = gtk.Label(cmd[key][0])
+            label.set_alignment(0, 1)
+
+            self.widget_cmd[key] = gtk.Entry()
+            self.widget_cmd[key].set_width_chars(45)
+            self.widget_cmd[key].set_text(conf.launcher[ind][key])
+
+            table.attach(label, 0, 1, ligne, ligne +1)
+            ligne += 1
+            table.attach(self.widget_cmd[key], 0, 1, ligne, ligne +1)
+            ligne += 1
+
+        table.set_col_spacings(4)
+        table.set_row_spacings(4)
+        table.set_border_width(4)
+        table.set_homogeneous(False)
+        
+        scrolled = gtk.ScrolledWindow()
+        scrolled.set_policy(gtk.POLICY_NEVER, gtk.POLICY_AUTOMATIC)
+        scrolled.add_with_viewport(table)
 
         box.pack_start(optionbox, False, False)
-        box.pack_start(gtk.HSeparator(), False, False)
-        box.pack_start(table, False, False)
+        #~ box.pack_start(gtk.HSeparator(), False, False)
+        box.pack_start(scrolled, True, True)
 
     def save_change(self):
-        self.conf.launcher[self.ind]['lockscreen'] = self.lockscreen.get_text()
-        self.conf.launcher[self.ind]['logout'] = self.logout.get_text()
-        self.conf.launcher[self.ind]['hibernate'] = self.hibernate.get_text()
-        self.conf.launcher[self.ind]['suspend'] = self.suspend.get_text()
-        self.conf.launcher[self.ind]['reboot'] = self.reboot.get_text()
-        self.conf.launcher[self.ind]['shutdown'] = self.shutdown.get_text()
+        for key in self.widget_cmd:
+            self.conf.launcher[self.ind][key] = self.widget_cmd[key].get_text()
+
         self.conf.launcher[self.ind]['icon_size'] = int(self.icon_size.get_value())
         self.conf.launcher[self.ind]['show_label'] = int(self.show_label_checkbox.get_active())
         self.conf.plg_mgr.plugins[self.ind].restart()
