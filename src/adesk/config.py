@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
-##
-#   ADesk Bar - config
-##
-
+# python modules
 import os
 import sys
 import traceback
 
+# adeskbar modules
 import adesk.core as Core
 
 class Config:

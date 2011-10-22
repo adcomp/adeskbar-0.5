@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# extra modules
+# python modules
 import gtk
 import traceback
 import gobject

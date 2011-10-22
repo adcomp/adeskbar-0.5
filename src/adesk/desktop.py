@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
+# python modules
 import gtk
-import adesk.core as Core
 
 HAS_WNCK = True
 try:
@@ -15,6 +15,9 @@ if HAS_WNCK:
         WINDOW_STATE_MINIMIZED = wnck.WINDOW_STATE_MINIMIZED
     except:
         WINDOW_STATE_MINIMIZED = 1<<0
+
+# adeskbar modules
+import adesk.core as Core
 
 class Wnck:
     def __init__(self, bar):

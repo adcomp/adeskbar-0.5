@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+# python modules
 import os
 import os.path
 import gtk

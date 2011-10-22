@@ -3,8 +3,6 @@
 # python modules
 import os
 import sys
-
-# extra modules
 import gtk
 import cairo
 import gobject
@@ -340,7 +338,7 @@ class BarManager():
         core.logINFO('reposition ..', 'BarManager')
         
         if self.cfg['fixed_mode']:
-            screen_width, screen_height = gtk.gdk.screen_width(), gtk.gdk.screen_height()
+            screen_width, screen_height = self.get_screen_size()
             
             if self.cfg['position'] == "bottom" or self.cfg['position'] == "top":
                 req_size = int(screen_width * self.cfg['fixed_size']/100.0)
@@ -815,8 +813,6 @@ class BarManager():
             # ctrl-c
             ## FIXME!! what to do now ? try to close adeskbar nicely ..
             self.doquit()
-
-
 
     def get_screen_size(self):
         return gtk.gdk.screen_width(), gtk.gdk.screen_height()

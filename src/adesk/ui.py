@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
-##
-#   ADesk Bar - UI
-##
-
+# python modules
 import gtk
 import cairo
 import gobject
 
+# adeskbar modules
 import adesk.core as Core
 
 def check_screen(widget):

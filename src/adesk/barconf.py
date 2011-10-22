@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 
-##
-#   ADesk Bar - UI config
-##
-
-## python modules
+# python modules
 import os
 import sys
 import gtk
