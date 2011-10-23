@@ -23,6 +23,8 @@ ID_CMD, ID_ICON, ID_NAME  = 0, 1, 2
 DEBUG = 0
 DEBUG_WIDGET = 0
 
+MONITOR = 0
+
 ## Icon theme
 ICON_THEME = gtk.icon_theme_get_default()
 
@@ -51,11 +53,13 @@ class BarManager():
         else:
             self.wnck = None
 
+        self.get_screen_size()
+        
         ## Load user/default config
         self.load_config()
         self.create_menu()
 
-        self.init_bar_callback()
+        #~ self.connect_event()
 
     def create_bar(self):
         """ create and configure gtk.Window (bar) """
@@ -63,10 +67,11 @@ class BarManager():
 
         self.win = ui.Window()
         self.win.set_type_hint(gtk.gdk.WINDOW_TYPE_HINT_DOCK)
+        self.win.add_events(gtk.gdk.BUTTON_PRESS_MASK|gtk.gdk.ENTER_NOTIFY|gtk.gdk.LEAVE_NOTIFY)
         self.win.set_title("ADeskBar")
         self.win.set_name("ADeskBar")
         self.is_composited = self.win.is_composited()
-        self.set_geometry()
+        #~ self.set_geometry()
 
     def set_geometry(self):
         core.logINFO('set geometry ..', 'BarManager')
@@ -107,7 +112,7 @@ class BarManager():
                                         width_inc=-1, height_inc=-1, 
                                         min_aspect=-1.0, max_aspect=-1.0)
 
-    def init_bar_callback(self):
+    def connect_event(self):
         core.logINFO('init bar callback ..', 'BarManager')
         
         ## Window callback
@@ -115,7 +120,7 @@ class BarManager():
         self.win.connect("leave-notify-event", self.bar_leave_notify)
         self.win.connect("enter-notify-event", self.bar_enter_notify)
         self.win.connect('expose-event', self.expose)
-        self.win.connect('screen-changed', self.reposition)
+        self.win.connect('screen-changed', self.screen_changed)
         self.win.connect('size-allocate', self.win_size_allocate)
         self.win.connect("realize", self.update_strut)
         self.win.connect("composited-changed", self.composite_changed)
@@ -197,9 +202,20 @@ class BarManager():
         self.win.destroy()
         self.load_config()
 
-    def create_menu(self):
-        ## Edit preferences
+    def create_menu(self, index=None):
         self.popupMenu = gtk.Menu()
+                
+        if index:
+            #~ menuPopup = gtk.MenuItem(self.launcher[index]['name'])
+            #~ self.popupMenu.add(menuPopup)
+            
+            ## Edit this widget
+            menuPopup = gtk.ImageMenuItem(gtk.STOCK_EDIT)
+            menuPopup.connect("activate", self.edit_widget, index)
+            self.popupMenu.add(menuPopup)
+
+
+        ## Edit preferences
         menuPopup = gtk.ImageMenuItem(gtk.STOCK_PREFERENCES)
         menuPopup.connect("activate", self.edit_config)
         self.popupMenu.add(menuPopup)
@@ -310,8 +326,8 @@ class BarManager():
             self.plg_mgr.append(ind, self.launcher[ind])
         self.plg_mgr.run()
 
-        # start bar callback
-        self.init_bar_callback()
+        ## bar callback
+        self.connect_event()
 
         ## gtk.Window doesn't stick after reload config ?!
         self.win.realize()
@@ -321,6 +337,7 @@ class BarManager():
         # init all plugins
         self.plg_mgr.on_init()
 
+        self.set_geometry()
         # sometimes reposition doesn't work :/ .. quick hack
         gobject.idle_add(self.reposition)
 
@@ -334,17 +351,20 @@ class BarManager():
             self.win.set_keep_above(True)
             self.win.set_keep_below(False)
 
+    def screen_changed(self):
+        self.get_screen_size()
+        self.reposition()
+
     def reposition(self):
         core.logINFO('reposition ..', 'BarManager')
         
         if self.cfg['fixed_mode']:
-            screen_width, screen_height = self.get_screen_size()
             
             if self.cfg['position'] == "bottom" or self.cfg['position'] == "top":
-                req_size = int(screen_width * self.cfg['fixed_size']/100.0)
+                req_size = int(self.monitor_w * self.cfg['fixed_size']/100.0)
                 self.win.resize(req_size, 1)
             else:
-                req_size = int(screen_height * self.cfg['fixed_size']/100.0)
+                req_size = int(self.monitor_h * self.cfg['fixed_size']/100.0)
                 self.win.resize(1, req_size)               
         else:
             self.win.resize(1, 1)
@@ -489,7 +509,6 @@ class BarManager():
         core.logINFO('init bar position ..', 'BarManager')
 
         self.bar_width , self.bar_height = self.get_size()
-        screen_width, screen_height = self.get_screen_size()
 
         if not self.is_composited:
             bar_size = 1
@@ -498,18 +517,18 @@ class BarManager():
 
         if self.cfg['position'] == "bottom":
             if self.cfg['bar_style'] == 0:
-                self.bar_pos_y = screen_height - self.bar_height + 1
+                self.bar_pos_y = self.monitor_h - self.bar_height + 1
             else:
-                self.bar_pos_y = screen_height - self.bar_height - self.cfg['offset_pos']
+                self.bar_pos_y = self.monitor_h - self.bar_height - self.cfg['offset_pos']
                 
             if self.cfg['align'] == "start":
                 self.bar_pos_x = 0 + self.cfg['offset_align']
             elif self.cfg['align'] == "center":
-                self.bar_pos_x = ( screen_width - self.bar_width ) // 2
+                self.bar_pos_x = ( self.monitor_w - self.bar_width ) // 2
             elif self.cfg['align'] == "end":
-                self.bar_pos_x = screen_width - self.bar_width - self.cfg['offset_align']
+                self.bar_pos_x = self.monitor_w - self.bar_width - self.cfg['offset_align']
 
-            self.bar_hide_y = screen_height - self.cfg['hidden_size']
+            self.bar_hide_y = self.monitor_h - self.cfg['hidden_size']
             self.bar_hide_x = self.bar_pos_x
 
             ## for expose
@@ -527,9 +546,9 @@ class BarManager():
             if self.cfg['align'] == "start":
                 self.bar_pos_x = self.cfg['offset_align']
             elif self.cfg['align'] == "center":
-                self.bar_pos_x = ( screen_width - self.bar_width ) // 2
+                self.bar_pos_x = ( self.monitor_w - self.bar_width ) // 2
             elif self.cfg['align'] == "end":
-                self.bar_pos_x = screen_width - self.bar_width - self.cfg['offset_align']
+                self.bar_pos_x = self.monitor_w - self.bar_width - self.cfg['offset_align']
 
             self.bar_hide_y = self.cfg['hidden_size'] - self.bar_height
             self.bar_hide_x = self.bar_pos_x
@@ -548,9 +567,9 @@ class BarManager():
             if self.cfg['align'] == "start":
                 self.bar_pos_y = 0 + self.cfg['offset_align']
             elif self.cfg['align'] == "center":
-                self.bar_pos_y = (screen_height - self.bar_height) // 2
+                self.bar_pos_y = (self.monitor_h - self.bar_height) // 2
             elif self.cfg['align'] == "end":
-                self.bar_pos_y = screen_height - self.bar_height - self.cfg['offset_align']
+                self.bar_pos_y = self.monitor_h - self.bar_height - self.cfg['offset_align']
 
             self.bar_hide_y = self.bar_pos_y
             self.bar_hide_x = - self.bar_width + self.cfg['hidden_size']
@@ -562,19 +581,19 @@ class BarManager():
 
         elif self.cfg['position'] == "right":
             if self.cfg['bar_style'] == 0:
-                self.bar_pos_x = screen_width - self.bar_width +1
+                self.bar_pos_x = self.monitor_w - self.bar_width +1
             else:
-                self.bar_pos_x = screen_width - self.bar_width - self.cfg['offset_pos']
+                self.bar_pos_x = self.monitor_w - self.bar_width - self.cfg['offset_pos']
                 
             if self.cfg['align'] == "start":
                 self.bar_pos_y = 0 + self.cfg['offset_align']
             elif self.cfg['align'] == "center":
-                self.bar_pos_y = (screen_height - self.bar_height) // 2
+                self.bar_pos_y = (self.monitor_h - self.bar_height) // 2
             elif self.cfg['align'] == "end":
-                self.bar_pos_y = screen_height - self.bar_height - self.cfg['offset_align']
+                self.bar_pos_y = self.monitor_h - self.bar_height - self.cfg['offset_align']
 
             self.bar_hide_y = self.bar_pos_y
-            self.bar_hide_x = screen_width - self.cfg['hidden_size']
+            self.bar_hide_x = self.monitor_w - self.cfg['hidden_size']
 
             ## for expose
             self.draw_height = self.bar_height
@@ -584,8 +603,8 @@ class BarManager():
 
         self.draw_width = int(self.draw_width)
         self.draw_height = int(self.draw_height)
-        self.draw_x = int(self.draw_x)
-        self.draw_y = int(self.draw_y)
+        self.draw_x = int(self.draw_x + self.monitor_x)
+        self.draw_y = int(self.draw_y + self.monitor_y)
 
         self.bg_surface = cairo.ImageSurface (cairo.FORMAT_ARGB32, self.bar_width , self.bar_height)
         self.draw_bg()
@@ -613,6 +632,7 @@ class BarManager():
         return True
 
     def widget_press(self, widget, event):
+
         if event.button==1:
             widget.is_pressed = True
             self.update()
@@ -623,7 +643,13 @@ class BarManager():
         if event.button==2:
             return False
 
+        if event.button==3: # right click
+            self.create_menu(widget.index)
+            self.popupMenu.popup(None, None, None, event.button, event.time)
+            return True
+
     def widget_released(self, widget, event):
+        
         if event.button==1:
             widget.onClick(widget, event)
             widget.is_pressed = False
@@ -765,6 +791,7 @@ class BarManager():
         self.last_event_time = event.time
 
         if event.button==3: # right click
+            self.create_menu()
             #~ if event.state == gtk.gdk.CONTROL_MASK | gtk.gdk.MOD2_MASK:
             self.popupMenu.popup(None, None, None, event.button, event.time)
 
@@ -795,6 +822,10 @@ class BarManager():
         else:
             self.bar_conf.window.present()
 
+    def edit_widget(self, widget, index):
+        self.edit_config(None)
+        self.bar_conf.edit_item_from_bar(index)
+
     def doquit(self, widget=None, data=None):
         core.logINFO('quit ..', 'BarManager')
         
@@ -815,7 +846,25 @@ class BarManager():
             self.doquit()
 
     def get_screen_size(self):
-        return gtk.gdk.screen_width(), gtk.gdk.screen_height()
+        
+        ## code for  Tyler Mulligan - http://www.doknowevil.net/
+        screen = gtk.gdk.screen_get_default()
+        print "X default screen size: %d x %d" % (screen.get_width(), screen.get_height())
+        print "xid of root window: %d" % screen.get_root_window().xid
+        
+        monitors = int(screen.get_n_monitors())
+        print "== %d monitors ==" % monitors
+        for m in range(0, monitors):
+            x, y, w, h = screen.get_monitor_geometry(m)
+            print " - geometry of monitor %d: %s" % (m, screen.get_monitor_geometry(m))
+            
+        ## default monitor is 0
+        x, y, w, h = screen.get_monitor_geometry(MONITOR)
+        
+        self.monitor_x = x
+        self.monitor_y = y
+        self.monitor_w = w
+        self.monitor_h = h
         
     def get_size(self):
         return self.win.get_size()

@@ -823,6 +823,12 @@ class Conf():
             model = view.get_model()
             Edit_Item(self, model, selection)
 
+    def edit_item_from_bar(self, plg_index):
+        self.nbook.set_current_page(2)
+        model = self.view.get_model()
+        position = self.plg_mgr.index.index(plg_index)
+        Edit_Item(self, model, position)
+
     def check_systray(self):
         for index in self.launcher:
             if self.launcher[index]['cmd'] == '@systray':

@@ -29,7 +29,7 @@ class Window(gtk.Window):
         self.stick()
         self.set_app_paintable(True)
         #~ self.set_double_buffered(False)
-        self.add_events(gtk.gdk.BUTTON_PRESS_MASK|gtk.gdk.ENTER_NOTIFY|gtk.gdk.LEAVE_NOTIFY)
+        #~ self.add_events(gtk.gdk.BUTTON_PRESS_MASK|gtk.gdk.ENTER_NOTIFY|gtk.gdk.LEAVE_NOTIFY)
         self.set_border_width(0)
         check_screen(self)
         self.connect('delete_event', self.on_close)

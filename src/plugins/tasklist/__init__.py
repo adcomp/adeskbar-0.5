@@ -167,7 +167,6 @@ class Plugin(Plg.PluginContainer):
         else:
             return self.num_workspaces
 
-    
     def _get_active_desktop(self):
         ws = self.screen.get_active_workspace()
         if self.use_viewports:           

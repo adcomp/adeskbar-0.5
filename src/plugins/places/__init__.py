@@ -61,10 +61,10 @@ class Places():
         
         ### add Home and / (filesystem)
         item = self.append_menu_item(self.menu, 'Home', 'user-home')
-        item.connect("activate", self.open, home)
+        item.connect("activate", self.open_dir, home)
         
         item = self.append_menu_item(self.menu, 'File System', 'drive-harddisk')
-        item.connect("activate", self.open, '/')
+        item.connect("activate", self.open_dir, '/')
 
 
         ### mounted device : parse /proc/mounts
@@ -84,8 +84,9 @@ class Places():
             self.menu.append(separator)
             separator.show()
             
-            for d in mount:
-                item = self.append_menu_item(self.menu, d, 'drive-harddisk')
+            for p in mount:
+                item = self.append_menu_item(self.menu, p, 'drive-harddisk')
+                item.connect("activate", self.open_dir, p)
 
         ### .gtk-bookmarks - parse user bookmarks
         if os.access("%s/.gtk-bookmarks" % home, os.F_OK|os.R_OK):
@@ -110,7 +111,7 @@ class Places():
                         label = tmp[0].split('/')[-1]
 
                     item = self.append_menu_item(self.menu, urllib.unquote(label), 'folder')
-                    item.connect("activate", self.open, bm_path)
+                    item.connect("activate", self.open_dir, bm_path)
             f.close()
 
     def create_menu_item(self, label, icon_name, comment):
@@ -129,7 +130,7 @@ class Places():
         item.show()
         return item
 
-    def open(self, widget, path):
+    def open_dir(self, widget, path):
         Core.launch_command('%s "%s"' % (self.plugin.settings['filemanager'], urllib.unquote(path)))
 
     def menu_deactivate(self, widget):
