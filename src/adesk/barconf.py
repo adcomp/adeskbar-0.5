@@ -77,6 +77,8 @@ def set_icon(icon, dst, item=None, size=None):
 class Conf():
 
     def __init__(self, bar):
+        
+        self.flag_from_bar = False
 
         ## tab for (position,align) on screen
         self.pos_align = [(1,0),(1,1),(1,2),
@@ -196,6 +198,9 @@ class Conf():
             self.ctrlbox.hide()
             self.nbook.set_current_page(-1)
         else:
+            if self.flag_from_bar:
+                self.close_and_save()
+                return
             self.frame_iconView.show()
             self.ctrlbox.show()
             self.nbook.set_current_page(2)

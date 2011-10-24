@@ -824,6 +824,7 @@ class BarManager():
 
     def edit_widget(self, widget, index):
         self.edit_config(None)
+        self.bar_conf.flag_from_bar = True
         self.bar_conf.edit_item_from_bar(index)
 
     def doquit(self, widget=None, data=None):
