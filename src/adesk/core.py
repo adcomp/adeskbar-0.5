@@ -39,6 +39,13 @@ def launch_command(cmd):
         realpath = os.path.dirname(os.path.realpath( __file__ ))
         os.chdir(realpath + '/..')
 
+
+def isfile(file):
+    if file != ' ' and file != None and len(file)!=0 and os.path.isfile(file):
+        return True
+    else:
+        return False
+
 def hex2rgb(color_hex):
     ## convert Hex color to RGB
     hexcolor = color_hex.strip()

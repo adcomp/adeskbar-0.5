@@ -10,10 +10,12 @@ import gobject
 import time
 
 import adesk.plugin as Plg
+import adesk.ui as UI
 
 def_settings = { 
     'line1':'%H:%M', 'line1_color':'#EEEEEE', 'line1_font':'Sans Bold 12',
     'line2':'%d/%m', 'line2_color':'#B5B5B5', 'line2_font':'Sans Bold 8',
+    'tooltip':'%c',
     }
 
 class Plugin(Plg.PluginContainer):
@@ -35,8 +37,13 @@ class Plugin(Plg.PluginContainer):
         self.add(self.box)
 
         self.set_from_config()
+        self.calendarplugin = Calendar(self, bar)
         self.update_time()
         gobject.timeout_add(1000, self.update_time)
+
+    def onClick(self, widget, event):
+        self.calendarplugin.restart()
+        self.calendarplugin.toggle()
 
     def set_from_config(self):
         self.line1_txt = ''
@@ -80,7 +87,9 @@ class Plugin(Plg.PluginContainer):
             if self.line2_txt <>line2_current:
                 self.lb_line2.set_markup(line2_current)
             self.line2_txt = line2_current
-            
+        if self.cfg['tooltips']:
+            self.calendarplugin.plugin.tooltip = time.strftime(self.settings['tooltip'], now)
+
         return True
 
     def resize(self):
@@ -100,3 +109,32 @@ class Plugin(Plg.PluginContainer):
         self.locked = False
         self.resize()
         self.update_time()
+
+
+class Calendar(UI.PopupWindow):
+    def __init__(self, plugin, bar):
+        UI.PopupWindow.__init__(self, bar, plugin)
+        self.plugin = plugin
+
+        self.box = gtk.HBox(False, 0)
+        self.box.set_border_width(5)
+
+        self.add(self.box)
+        self.create_calendar()
+
+    def create_calendar(self):
+        calendarbox = gtk.Calendar()
+        calendarbox.mark_day(int(time.strftime('%d', time.localtime())))
+        self.box.pack_start(calendarbox, False, False)
+        self.box.show_all()
+
+    def restart(self):
+        self.box.destroy()
+        self.box = gtk.HBox(False, 0)
+        self.box.set_border_width(5)
+
+        self.add(self.box)
+
+        self.resize(1, 1)
+        self.box.set_size_request(-1, -1)
+        self.create_calendar()

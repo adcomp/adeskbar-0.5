@@ -28,33 +28,33 @@ DEBUG = 0
 PATH = os.environ['PATH'].split(':')
 
 def exists_in_list(list,item):
-	for i in list:
-		if i == item:
-			return True
-	return False
+    for i in list:
+        if i == item:
+            return True
+    return False
 
 # look for executable files
 class FileListing:
-	
-	l = []	
+    
+    l = []  
 
-	def __init__(self,path):
-		self.PATH = path
-		for dir in self.PATH:
-			self.append_files_from(dir)
+    def __init__(self,path):
+        self.PATH = path
+        for dir in self.PATH:
+            self.append_files_from(dir)
 
-	def get_file_set(self):
-		return set(self.l)
+    def get_file_set(self):
+        return set(self.l)
 
-	def append_files_from(self,dir):
-		dirname = os.path.abspath(dir)
-		files = [ f for f in os.listdir(dir) if f[0] <> '.' ]
-		files.sort()
+    def append_files_from(self,dir):
+        dirname = os.path.abspath(dir)
+        if not os.path.exists(dirname):
+            return
+        files = [ f for f in os.listdir(dir) if f[0] <> '.' ]
+        files.sort()
 
-		for file in files:
-			self.l.append(file)	
-
-
+        for file in files:
+            self.l.append(file) 
 
 class EventHandler(pyinotify.ProcessEvent):
     
@@ -276,12 +276,12 @@ class Menu_UI(UI.PopupWindow):
             self.toggle()
 
     def create_completion_model(self):
-		store = gtk.ListStore(str)
-		f = self.fl.get_file_set()
-		for file in f:
-			iter = store.append()
-			store.set(iter,0,file)
-		return store
+        store = gtk.ListStore(str)
+        f = self.fl.get_file_set()
+        for file in f:
+            iter = store.append()
+            store.set(iter,0,file)
+        return store
 
     def enter_callback(self, widget):
         Core.launch_command(self.entry.get_text())

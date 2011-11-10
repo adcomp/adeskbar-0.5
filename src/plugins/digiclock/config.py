@@ -2,9 +2,20 @@
 
 import gtk
 
+import locale
+import gettext
+## Translation
+locale.setlocale(locale.LC_ALL, '')
+#~ gettext.install('adeskbar', './locale', unicode=1)
+gettext.bindtextdomain('adeskbar', './locale')
+gettext.bind_textdomain_codeset('adeskbar','UTF-8')
+gettext.textdomain('adeskbar')
+_ = gettext.gettext
+
 settings = {
     'line1':'%H:%M', 'line1_color':'#EEEEEE', 'line1_font':'Sans Bold 12',
     'line2':'%d/%m', 'line2_color':'#B5B5B5', 'line2_font':'Sans Bold 8',
+    'tooltip':'%c',
     }
 
 INFO = """%a  Locale’s abbreviated weekday name.
@@ -13,6 +24,8 @@ INFO = """%a  Locale’s abbreviated weekday name.
 %B  Locale’s full month name.
 %c  Locale’s appropriate date and time representation.
 %d  Day of the month as a decimal number [01,31].
+%e  Day of the month as a decimal number [1,31].
+%D  month/day/year as a decimal number [01,12]/[01,31]/[00,99].
 %H  Hour (24-hour clock) as a decimal number [00,23].
 %I  Hour (12-hour clock) as a decimal number [01,12].
 %j  Day of the year as a decimal number [001,366].
@@ -86,6 +99,17 @@ class config():
         table.attach(self.line2_color, 2, 3, 1, 2)
         table.attach(self.line2_font, 3, 4, 1, 2)
 
+        label = gtk.Label(_("Tooltip :"))
+        label.set_alignment(0, 0.5)
+        self.tooltip_format = gtk.Entry()
+        self.tooltip_format.set_width_chars(10)
+        self.tooltip_format.set_text(self.settings['tooltip'])
+
+        table.attach(label, 0, 1, 2, 3)
+        table.attach(self.tooltip_format, 1, 2, 2, 3)
+
+        box.pack_start(table, True)
+
         text_line1format = gtk.TextView()
         text_line1format.set_wrap_mode(gtk.WRAP_WORD)
         text_line1format.set_border_width(2)
@@ -110,4 +134,5 @@ class config():
         self.conf.launcher[self.ind]['line2'] = self.line2_format.get_text()
         self.conf.launcher[self.ind]['line2_color'] = gtk.color_selection_palette_to_string([self.line2_color.get_color()])
         self.conf.launcher[self.ind]['line2_font'] = self.line2_font.get_font_name()
+        self.conf.launcher[self.ind]['tooltip'] = self.tooltip_format.get_text()
         self.conf.plg_mgr.plugins[self.ind].restart()

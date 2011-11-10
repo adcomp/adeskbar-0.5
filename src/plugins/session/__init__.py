@@ -10,13 +10,22 @@ import adesk.plugin as Plg
 import adesk.core as Core
 import adesk.ui as UI
 
-session = { 'logout':('Log Out','log out the session.', 'gnome-session-logout'),
-            'hibernate':('Hibernate','save session and power off.', 'gnome-session-hibernate'),
-            'suspend':('Suspend','suspend session.', 'gnome-session-suspend'),
-            'reboot':('Reboot','restart computer.', 'gnome-session-reboot'),
-            'shutdown':('Shut Down','power off computer.', 'gnome-session-halt'),
-            'lockscreen':('Lock Screen','lock screen to prevent unauthotised use.', 'system-lock-screen'),
-          }
+import locale
+import gettext
+## Translation
+locale.setlocale(locale.LC_ALL, '')
+gettext.bindtextdomain('adeskbar', './locale')
+gettext.bind_textdomain_codeset('adeskbar','UTF-8')
+gettext.textdomain('adeskbar')
+_ = gettext.gettext
+
+session = { 'logout':(_('Log Out'),_('log out the session.'), 'system-log-out'),
+            'hibernate':(_('Hibernate'),_('save session and power off.'), 'gnome-session-hibernate'),
+            'suspend':(_('Suspend'),_('suspend session.'), 'gnome-session-suspend'),
+            'reboot':(_('Reboot'),_('restart computer.'), 'gnome-session-reboot'),
+            'shutdown':(_('Shut Down'),_('power off computer.'), 'system-shutdown'),
+            'lockscreen':(_('Lock Screen'),_('lock screen to prevent unauthotised use.'), 'system-lock-screen'),
+}
 
 class Plugin(Plg.Plugin):
     def __init__(self, bar, settings):
@@ -64,12 +73,17 @@ class Session(UI.PopupWindow):
                 
                 if self.plugin.settings['show_label']:
                     label = '<b>%s</b>\n<small>%s</small>' % (session[action][0], session[action][1])
-                    button = Core.image_button(label, session[action][2], self.plugin.settings['icon_size'])
+                    pixbuf = Core.get_pixbuf_icon(session[action][2], self.plugin.settings['icon_size'])
+                    if pixbuf == None:
+                       pixbuf = Core.pixbuf_from_file('images/plugins/session/'+session[action][2]+'.png', self.plugin.settings['icon_size'], self.plugin.settings['icon_size'])
+                    button = Core.image_button(label, pixbuf, self.plugin.settings['icon_size'])
                 else:
                     button = gtk.Button()
                     button.set_relief(gtk.RELIEF_NONE)
                     img = gtk.Image()
                     pixbuf = Core.get_pixbuf_icon(session[action][2], self.plugin.settings['icon_size'])
+                    if pixbuf == None:
+                       pixbuf = Core.pixbuf_from_file('images/plugins/session/'+session[action][2]+'.png', self.plugin.settings['icon_size'], self.plugin.settings['icon_size'])
                     img.set_from_pixbuf(pixbuf)
                     button.add(img)
                 button.connect("button-release-event", self.onClicked, self.plugin.settings[action])

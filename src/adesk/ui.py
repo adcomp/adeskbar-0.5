@@ -295,8 +295,8 @@ class PopupWindow(Window):
         self.show()
 
     def reposition(self):
-        offset_popup = 2
-        offset_screen = 2
+        offset_popup = 0
+        offset_screen = 4
         
         if self.plugin == None:
             plugin_x, plugin_y, plugin_w, plugin_h = self.bar.win.get_allocation()

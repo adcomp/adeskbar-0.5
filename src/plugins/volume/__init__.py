@@ -13,6 +13,15 @@ import adesk.plugin as Plg
 import adesk.core as Core
 import adesk.ui as UI
 
+import locale
+import gettext
+## Translation
+locale.setlocale(locale.LC_ALL, '')
+gettext.bindtextdomain('adeskbar', './locale')
+gettext.bind_textdomain_codeset('adeskbar','UTF-8')
+gettext.textdomain('adeskbar')
+_ = gettext.gettext
+
 try:
     import alsaaudio as alsa
 except:
@@ -89,7 +98,11 @@ class Volume(UI.PopupWindow):
         self.box = gtk.VBox(False, 4)
         self.box.set_border_width(2)
 
-        mixer_bt = gtk.Button('Mixer')
+        mixer_bt = gtk.Button()
+        image =  gtk.Image()
+        pixbuf = Core.get_pixbuf_icon('multimedia-volume-control', self.cfg['icon_size'])
+        image.set_from_pixbuf(pixbuf)
+        mixer_bt.set_image(image)
         mixer_bt.connect("clicked", self.onClicked)
         mixer_bt.set_relief(gtk.RELIEF_NONE)
         mixer_bt.set_border_width(0)
@@ -111,17 +124,21 @@ class Volume(UI.PopupWindow):
         if self.mixer:
             try:
                 self.mixer.setvolume(int(volume))
-                self.plugin.tooltip = 'Volume : %s %%' % int(volume)
-                self.plugin.set_tooltip('Volume : %s %%' % int(volume))
+                if self.cfg['tooltips']:
+                  if volume == 0:
+                    self.plugin.tooltip = _('Muted')
+                  else:
+                    self.plugin.tooltip = _('Volume')+' : %s %%' % int(volume)
             except:
-                self.plugin.tooltip = "No such channel"
+                if self.cfg['tooltips']:
+                  self.plugin.tooltip = _("No such channel")
         else:
             return
 
         if volume < 1:
             icon = 'audio-volume-muted'
-        elif volume < 10:
-            icon = 'audio-volume-low'
+#        elif volume < 10:
+#            icon = 'audio-volume-low'
         elif volume < 33:
             icon = 'audio-volume-low'
         elif volume < 66:
@@ -136,15 +153,19 @@ class Volume(UI.PopupWindow):
     def on_value_changed(self, widget):
         if self.mixer:
             vol = self.scale.get_value()
+            if vol == 0:
+               self.mixer.setmute(1)
+            else:
+               self.mixer.setmute(0)
         else:
             vol = 0
         self.set_volume(vol)
 
-    def get_volume_tooltip(self):
-        if self.mixer:
-            return 'Volume : %s %%' % self.mixer.getvolume()[0]
-        else:
-            return 'no mixer'
+#    def get_volume_tooltip(self):
+#        if self.mixer:
+#            return 'Volume : %s %%' % self.mixer.getvolume()[0]
+#        else:
+#            return 'no mixer'
 
     def change_volume(self, data=None):
         if self.mixer:
@@ -160,5 +181,5 @@ class Volume(UI.PopupWindow):
 
     def on_init(self):
         if self.mixer:
-           volume =  self.mixer.getvolume()[0]
+           volume = self.mixer.getvolume()[0]
            self.set_volume(volume)

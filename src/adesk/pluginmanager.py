@@ -126,8 +126,14 @@ class PluginManager:
             widget.connect("leave-notify-event", self.bar.launcher_leave_notify)
 
             widget.show()
+            
+            ## FIXME ( v0.5 ) test if expand exist ( new option for tasklist )
+            if launcher['cmd'][1:] == 'tasklist' and 'expand' in launcher:
+                expand = int(launcher['expand'])
+            else:
+                expand = True
 
-            if launcher['cmd'][1:] == 'expander' or (launcher['cmd'][1:] == 'tasklist' and int(launcher['expand'])):
+            if launcher['cmd'][1:] == 'expander' or expand:
                 self.box.pack_start(widget, True, True)
             else:
                 self.box.pack_start(widget, False, False)
