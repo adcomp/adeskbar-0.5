@@ -131,7 +131,7 @@ class PluginManager:
             if launcher['cmd'][1:] == 'tasklist' and 'expand' in launcher:
                 expand = int(launcher['expand'])
             else:
-                expand = True
+                expand = False
 
             if launcher['cmd'][1:] == 'expander' or expand:
                 self.box.pack_start(widget, True, True)
