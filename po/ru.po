@@ -1,0 +1,911 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-28 14:30+0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: Vasiliy Temnikov\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../adesk/barconf.py:113
+msgid "Settings"
+msgstr "Параметры"
+
+#: ../adesk/barconf.py:130
+msgid "preferences"
+msgstr "Настройки"
+
+#: ../adesk/barconf.py:134
+msgid "position"
+msgstr "Позиция"
+
+#: ../adesk/barconf.py:138
+msgid "launchers"
+msgstr "Кнопки"
+
+#: ../adesk/barconf.py:142
+msgid "advanced"
+msgstr "Расширенные"
+
+#: ../adesk/barconf.py:146
+msgid "about"
+msgstr "О ADeskBar"
+
+#: ../adesk/barconf.py:210
+msgid "Size"
+msgstr "Размер иконок"
+
+#: ../adesk/barconf.py:227
+msgid "Edgy"
+msgstr "Сгладить с одной стороны"
+
+#: ../adesk/barconf.py:228
+msgid "Floaty"
+msgstr "Сгладить с двух сторон"
+
+#: ../adesk/barconf.py:230
+msgid "3d"
+msgstr "3d"
+
+#: ../adesk/barconf.py:235
+msgid "Style"
+msgstr "Стиль"
+
+#: ../adesk/barconf.py:242
+msgid "None"
+msgstr "Никакой"
+
+#: ../adesk/barconf.py:243
+msgid "Glow"
+msgstr "Подсвечивание"
+
+#: ../adesk/barconf.py:244
+msgid "Simple"
+msgstr "Выделение цветом"
+
+#: ../adesk/barconf.py:245
+msgid "Zoom"
+msgstr "Увеличение"
+
+#: ../adesk/barconf.py:250
+msgid "Icons effects"
+msgstr "Эффект иконок"
+
+#: ../adesk/barconf.py:257
+msgid "Always visible"
+msgstr "Всегда показывать"
+
+#: ../adesk/barconf.py:258
+msgid "Autohide"
+msgstr "Автоскрытие"
+
+#: ../adesk/barconf.py:261
+msgid "Intellihide"
+msgstr "Умное скрытие"
+
+#: ../adesk/barconf.py:266
+msgid "Behavior"
+msgstr "Поведение"
+
+#: ../adesk/barconf.py:276
+msgid "fixed mode ( aka \"panel\" )"
+msgstr "Фиксированный режим ( как \"панель\" )"
+
+#: ../adesk/barconf.py:287
+msgid "reserve space at screen edge"
+msgstr "Оставить пространство под панелью"
+
+#: ../adesk/barconf.py:301
+msgid "Show on mouse over"
+msgstr "Показать при наведении"
+
+#: ../adesk/barconf.py:308
+msgid "Keep below other windows"
+msgstr "Оставлять скрытой за окнами"
+
+#: ../adesk/barconf.py:315
+msgid "Show launchers tooltips"
+msgstr "Показать всплывающие сообщения на кнопках"
+
+#: ../adesk/barconf.py:375
+msgid "Select position on screen"
+msgstr "Выбрать позицию панели на экране"
+
+#: ../adesk/barconf.py:429
+msgid "Offset - position"
+msgstr "Отступ позиции"
+
+#: ../adesk/barconf.py:442
+msgid "Offset - align"
+msgstr "Отступ прижатия"
+
+#: ../adesk/barconf.py:485
+msgid "add from menu"
+msgstr "Добавить из меню"
+
+#: ../adesk/barconf.py:490
+msgid "add plugin"
+msgstr "Добавить плагин"
+
+#: ../adesk/barconf.py:495
+msgid "remove"
+msgstr "Удалить"
+
+#: ../adesk/barconf.py:500
+msgid "add custom launcher"
+msgstr "Добавить свою кнопку"
+
+#: ../adesk/barconf.py:538
+msgid "Opacity"
+msgstr "Прозрачность"
+
+#: ../adesk/barconf.py:544
+msgid "Fake Transparency (if no composite)"
+msgstr "Прозрачность, если нет composite"
+
+#: ../adesk/barconf.py:563
+msgid "Bar size"
+msgstr "Размер панели"
+
+#: ../adesk/barconf.py:575
+msgid "Rounded"
+msgstr "Скругление углов"
+
+#: ../adesk/barconf.py:590
+msgid "Space between icon"
+msgstr "Пространство между иконок"
+
+#: ../adesk/barconf.py:602
+msgid "Icon padding"
+msgstr "Отступ иконок"
+
+#: ../adesk/barconf.py:614
+msgid "Zoom Factor"
+msgstr "Увеличение иконок"
+
+#: ../adesk/barconf.py:629
+msgid "Background color [ Bar ]"
+msgstr "Цвет заднего плана [ Панель ]"
+
+#: ../adesk/barconf.py:638
+msgid "add some gradients"
+msgstr "Добавить градиент"
+
+#: ../adesk/barconf.py:649
+msgid "Show border"
+msgstr "Показать рамку"
+
+#: ../adesk/barconf.py:672
+msgid "Background color [ Tooltips / Plugins ]"
+msgstr "Цвет заднего плана [ Подсказки / Плагины ]"
+
+#: ../adesk/barconf.py:681
+msgid "Border color"
+msgstr "Цвет рамки"
+
+#: ../adesk/barconf.py:696
+msgid "Hidden size"
+msgstr "Размер панели в скрытом состоянии"
+
+#: ../adesk/barconf.py:708
+msgid "Hide after tempo (sec)"
+msgstr "Скрывать панель после задержки (сек)"
+
+#: ../adesk/barconf.py:713
+msgid "smooth hiding ( animation )"
+msgstr "Плавное скрытие панели ( анимация )"
+
+#: ../adesk/barconf.py:720
+msgid "Fully transparent when hidden"
+msgstr "Панель полностью прозрачна, когда скрыта"
+
+#: ../adesk/barconf.py:1187
+msgid "Edit"
+msgstr "Изменить"
+
+#: ../adesk/barconf.py:1199
+msgid "Name:"
+msgstr "Название : "
+
+#: ../adesk/barconf.py:1208
+msgid "Plugin:"
+msgstr "Плагин : "
+
+#: ../adesk/barconf.py:1211
+msgid "Command:"
+msgstr "Команда : "
+
+#: ../adesk/barconf.py:1217
+msgid "Icon:"
+msgstr "Иконка : "
+
+#: ../adesk/barconf.py:1321
+msgid "Select image file.."
+msgstr "Выбрать Имя"
+
+#: ../adesk/barconf.py:1331
+msgid "Images"
+msgstr "Имя"
+
+#: ../adesk/barconf.py:1341 ../adesk/barconf.py:1377
+msgid "All files"
+msgstr "Все файлы"
+
+#: ../adesk/barconf.py:1367
+msgid "Select command.."
+msgstr "Выбрать команду.."
+
+msgid "Size in pixel"
+msgstr "Размер в пикселях"
+
+msgid "panel size in %"
+msgstr "Размер панели в %"
+
+msgid "hidden size in pixel"
+msgstr "Размер в скрытом состоянии в пикселях"
+
+msgid "time in second"
+msgstr "Время в секундах"
+
+msgid "some options are disabled"
+msgstr "некоторые опции будут отключены"
+
+
+
+
+
+
+# PLUGINS
+
+# __init__
+
+#: ../plugins/__init__.py:16
+msgid "Window list"
+msgstr "Список окон"
+
+#: ../plugins/__init__.py:21
+msgid "Places"
+msgstr "Закладки"
+
+#: ../plugins/__init__.py:26
+msgid "Task list"
+msgstr "Панель задач"
+
+#: ../plugins/__init__.py:31
+msgid "Show Desktop"
+msgstr "Рабочий стол"
+
+#: ../plugins/__init__.py:36
+msgid "Digital clock"
+msgstr "Часы"
+
+#: ../plugins/__init__.py:41
+msgid "Drawer"
+msgstr "Кнопка запуска"
+
+#: ../plugins/__init__.py:46
+msgid "Menu"
+msgstr "Меню"
+
+#: ../plugins/__init__.py:51
+msgid "Menu (simple)"
+msgstr "Меню (простое)"
+
+#: ../plugins/__init__.py:56
+msgid "Search Box"
+msgstr "Поиск"
+
+#: ../plugins/__init__.py:61
+msgid "Separator"
+msgstr "Разделитель"
+
+#: ../plugins/__init__.py:66
+msgid "Session"
+msgstr "Выключение"
+
+#: ../plugins/__init__.py:71
+msgid "Notification area"
+msgstr "Трей"
+
+#: ../plugins/__init__.py:76
+msgid "Spacer"
+msgstr "Промежуток"
+
+#: ../plugins/__init__.py:81
+msgid "Terminal"
+msgstr "Терминал"
+
+#: ../plugins/__init__.py:86
+msgid "Volume Control"
+msgstr "Громкость"
+
+#: ../plugins/__init__.py:92
+msgid "Gmail checker"
+msgstr "Проверка почты Gmail"
+
+msgid "Mail IMAP checker"
+msgstr "Проверка IMAP почты"
+
+
+msgid "Weather from Yahoo.com"
+msgstr "Погода c Yahoo.com"
+
+msgid "Alarm clock"
+msgstr "Часы-будильник"
+
+msgid "Notepad"
+msgstr "Блокнот"
+
+
+
+
+
+
+
+# PLUGIN "SESSION"
+
+#: ../plugins/session.py:18
+msgid "Log Out"
+msgstr "Выйти"
+
+#: ../plugins/session.py:18
+msgid "log out the session."
+msgstr "из сессии"
+
+#: ../plugins/session.py:19
+msgid "Hibernate"
+msgstr "Перейти"
+
+#: ../plugins/session.py:19
+msgid "save session and power off."
+msgstr "в спящий режим"
+
+#: ../plugins/session.py:20
+msgid "Suspend"
+msgstr "Перейти"
+
+#: ../plugins/session.py:20
+msgid "suspend session."
+msgstr "в ждущий режим"
+
+#: ../plugins/session.py:21
+msgid "Reboot"
+msgstr "Перезагрузить"
+
+#: ../plugins/session.py:21
+msgid "restart computer."
+msgstr "компьютер"
+
+#: ../plugins/session.py:22
+msgid "Shut Down"
+msgstr "Выключить"
+
+#: ../plugins/session.py:22
+msgid "power off computer."
+msgstr "компьютер"
+
+#: ../plugins/session.py:23
+msgid "Lock Screen"
+msgstr "Заблокировать"
+
+#: ../plugins/session.py:23
+msgid "lock screen to prevent unauthotised use."
+msgstr "экран пользователя"
+
+
+
+
+# PLUGIN "VOLUME"
+
+#: ../plugins/volume.py:119 ../plugins/volume.py:120
+msgid "Volume"
+msgstr "Громкость"
+
+#: ../plugins/volume.py:122
+msgid "No such channel"
+msgstr "Не выбран канал"
+
+msgid "Muted"
+msgstr "Приглушено"
+
+
+
+
+
+
+
+# PLUGIN "GMAIL CHECKER"
+
+msgid "Error loading mail"
+msgstr "Ошибка получения почты"
+
+#: ../plugins/gmailchecker.py:148 ../plugins/gmailchecker.py:149
+msgid "No unread mail"
+msgstr "Нет непрочитанных писем"
+
+#: ../plugins/gmailchecker.py:160 ../plugins/gmailchecker.py:161
+msgid "Unread mail : "
+msgstr "Непрочитанных писем : "
+
+#: ../plugins/conf/gmailchecker.py:37
+msgid "Hide icon, if no mail"
+msgstr "Скрывать иконку, если нет почты"
+
+#: ../plugins/conf/gmailchecker.py:42
+msgid "icon size in pixels"
+msgstr "Размер иконок в пикселях"
+
+#: ../plugins/conf/gmailchecker.py:44
+msgid "icon size"
+msgstr "Размер иконок"
+
+#: ../plugins/conf/gmailchecker.py:58
+msgid "Play sound file"
+msgstr "Проиграть звуковой файл"
+
+#: ../plugins/conf/gmailchecker.py:68
+msgid "Login :"
+msgstr "Логин :"
+
+#: ../plugins/conf/gmailchecker.py:78
+msgid "Password :"
+msgstr "Пароль :"
+
+#: ../plugins/conf/gmailchecker.py:88
+msgid "Browser :"
+msgstr "Браузер :"
+
+#: ../plugins/conf/gmailchecker.py:98
+msgid "Minutes to update : "
+msgstr "Минуты для обновления : "
+
+#: ../plugins/conf/gmailchecker.py:108
+msgid "Sound file :"
+msgstr "Звуковой файл :"
+
+#: ../plugins/conf/gmailchecker.py:125
+msgid "Select sound file.."
+msgstr "Выбрать звуковой файл.."
+
+#: ../plugins/conf/gmailchecker.py:135
+msgid "Sounds"
+msgstr "Звуки"
+
+
+
+# PLUGIN "MAIL IMAP CHECKER"
+msgid "IMAP server :"
+msgstr "IMAP сервер :"
+
+msgid "IMAP folder :"
+msgstr "IMAP папка :"
+
+msgid "Connection timeout :"
+msgstr "Таймаут соединения :"
+
+msgid "Maximum mails :"
+msgstr "Количество писем :"
+
+msgid "Check mail on start"
+msgstr "Проверять почту при загрузке программы"
+
+
+
+
+
+
+
+
+
+
+# PLUGIN "WEATHER YAHOO"
+
+#: ../plugins/weatheryahoo.py:28
+msgid "Tornado"
+msgstr "Торнадо"
+
+#: ../plugins/weatheryahoo.py:29
+msgid "Tropical storm"
+msgstr "Тропический шторм"
+
+#: ../plugins/weatheryahoo.py:30
+msgid "Hurricane"
+msgstr "Ураган"
+
+#: ../plugins/weatheryahoo.py:31
+msgid "Severe thunderstorms"
+msgstr "Сильная гроза"
+
+#: ../plugins/weatheryahoo.py:32
+msgid "Thunderstorms"
+msgstr "Гроза"
+
+#: ../plugins/weatheryahoo.py:33
+msgid "Mixed rain and snow"
+msgstr "Дождь со снегом"
+
+#: ../plugins/weatheryahoo.py:34
+msgid "Mixed rain and sleet"
+msgstr "Дождь с мокрым снегом"
+
+#: ../plugins/weatheryahoo.py:35
+msgid "Mixed snow and sleet"
+msgstr "Снег с дождем"
+
+#: ../plugins/weatheryahoo.py:36
+msgid "Freezing drizzle"
+msgstr "Снег с мокрым снегом"
+
+#: ../plugins/weatheryahoo.py:37
+msgid "Drizzle"
+msgstr "Моросящий дождь"
+
+#: ../plugins/weatheryahoo.py:38
+msgid "Freezing rain"
+msgstr "Холодный дождь"
+
+#: ../plugins/weatheryahoo.py:39 ../plugins/weatheryahoo.py:40
+msgid "Showers"
+msgstr "Дождь"
+
+#: ../plugins/weatheryahoo.py:41
+msgid "Snow flurries"
+msgstr "Снежная метель"
+
+#: ../plugins/weatheryahoo.py:42
+msgid "Light snow showers"
+msgstr "Снежная метель"
+
+#: ../plugins/weatheryahoo.py:43
+msgid "Blowing snow"
+msgstr "Гололёд"
+
+#: ../plugins/weatheryahoo.py:44
+msgid "Snow"
+msgstr "Снег"
+
+#: ../plugins/weatheryahoo.py:45
+msgid "Hail"
+msgstr "Гроза"
+
+#: ../plugins/weatheryahoo.py:46
+msgid "Sleet"
+msgstr "Мокрый снег"
+
+#: ../plugins/weatheryahoo.py:47
+msgid "Dust"
+msgstr "Песчаная буря"
+
+#: ../plugins/weatheryahoo.py:48
+msgid "Foggy"
+msgstr "Туман"
+
+#: ../plugins/weatheryahoo.py:49
+msgid "Haze"
+msgstr "Туман"
+
+#: ../plugins/weatheryahoo.py:50
+msgid "Smoky"
+msgstr "Туман"
+
+#: ../plugins/weatheryahoo.py:51
+msgid "Blustery"
+msgstr "Буря"
+
+#: ../plugins/weatheryahoo.py:52
+msgid "Windy"
+msgstr "Ветрено"
+
+#: ../plugins/weatheryahoo.py:53
+msgid "Cold"
+msgstr "Холодно"
+
+#: ../plugins/weatheryahoo.py:54
+msgid "Cloudy"
+msgstr "Облачно"
+
+#: ../plugins/weatheryahoo.py:55 ../plugins/weatheryahoo.py:56
+msgid "Mostly cloudy"
+msgstr "Небольшая облачность"
+
+#: ../plugins/weatheryahoo.py:57 ../plugins/weatheryahoo.py:58
+#: ../plugins/weatheryahoo.py:72
+msgid "Partly cloudy"
+msgstr "Переменная облачность"
+
+#: ../plugins/weatheryahoo.py:59
+msgid "Clear"
+msgstr "Ясно"
+
+#: ../plugins/weatheryahoo.py:60
+msgid "Sunny"
+msgstr "Солнечно"
+
+#: ../plugins/weatheryahoo.py:61 ../plugins/weatheryahoo.py:62
+msgid "Fair"
+msgstr "Ясно"
+
+#: ../plugins/weatheryahoo.py:63
+msgid "Mixed rain and hail"
+msgstr "Дождь с грозой"
+
+#: ../plugins/weatheryahoo.py:64
+msgid "Hot"
+msgstr "Жара"
+
+#: ../plugins/weatheryahoo.py:65
+msgid "Isolated thunderstorms"
+msgstr "Небольшая гроза"
+
+#: ../plugins/weatheryahoo.py:66 ../plugins/weatheryahoo.py:67
+msgid "Scattered thunderstorms"
+msgstr "Небольшая гроза"
+
+#: ../plugins/weatheryahoo.py:68
+msgid "Scattered showers"
+msgstr "Небольшой дождь"
+
+#: ../plugins/weatheryahoo.py:69 ../plugins/weatheryahoo.py:71
+msgid "Heavy snow"
+msgstr "Сильный снегопад"
+
+#: ../plugins/weatheryahoo.py:70
+msgid "Scattered snow showers"
+msgstr "Местами снег"
+
+#: ../plugins/weatheryahoo.py:73
+msgid "Thundershowers"
+msgstr "Ливень"
+
+#: ../plugins/weatheryahoo.py:74
+msgid "Snow showers"
+msgstr "Снегопад"
+
+#: ../plugins/weatheryahoo.py:75
+msgid "Isolated thundershowers"
+msgstr "Местами гроза"
+
+#: ../plugins/weatheryahoo.py:76
+msgid "Scattered thundershowers"
+msgstr "Местами дождь"
+
+#: ../plugins/weatheryahoo.py:138 ../plugins/weatheryahoo.py:162
+msgid "Nord"
+msgstr "северый"
+
+#: ../plugins/weatheryahoo.py:142
+msgid "Nord-West"
+msgstr "cеверо-западный"
+
+#: ../plugins/weatheryahoo.py:144
+msgid "West"
+msgstr "западный"
+
+#: ../plugins/weatheryahoo.py:146
+msgid "South-West"
+msgstr "юго-западный"
+
+#: ../plugins/weatheryahoo.py:150
+msgid "South"
+msgstr "южный"
+
+#: ../plugins/weatheryahoo.py:154
+msgid "South-East"
+msgstr "юго-восточный"
+
+#: ../plugins/weatheryahoo.py:156
+msgid "East"
+msgstr "восточный"
+
+#: ../plugins/weatheryahoo.py:158
+msgid "Nord-East"
+msgstr "северо-восточный"
+
+#: ../plugins/weatheryahoo.py:165
+msgid "m/s"
+msgstr "м/с"
+
+#: ../plugins/weatheryahoo.py:166
+msgid "km"
+msgstr "км"
+
+#: ../plugins/weatheryahoo.py:167
+msgid "mb"
+msgstr "мм"
+
+msgid "mph"
+msgstr "м/ч"
+
+msgid "mi"
+msgstr "мили"
+
+msgid "in"
+msgstr "мм"
+
+#: ../plugins/weatheryahoo.py:194 ../plugins/weatheryahoo.py:304
+msgid "Barometer : "
+msgstr "Давление "
+
+#: ../plugins/weatheryahoo.py:195 ../plugins/weatheryahoo.py:302
+msgid "Humidity : "
+msgstr "Влажность "
+
+#: ../plugins/weatheryahoo.py:196 ../plugins/weatheryahoo.py:303
+msgid "Visibility : "
+msgstr "Видимость "
+
+#: ../plugins/weatheryahoo.py:197 ../plugins/weatheryahoo.py:300
+msgid "Wind : "
+msgstr "Ветер "
+
+#: ../plugins/weatheryahoo.py:198
+msgid "Speed : "
+msgstr "Скорость "
+
+#: ../plugins/weatheryahoo.py:199 ../plugins/weatheryahoo.py:306
+msgid "Sunrise : "
+msgstr "Восход в "
+
+#: ../plugins/weatheryahoo.py:200 ../plugins/weatheryahoo.py:307
+msgid "Sunset : "
+msgstr "Закат в "
+
+#: ../plugins/weatheryahoo.py:203 ../plugins/weatheryahoo.py:206
+#: ../plugins/weatheryahoo.py:331
+msgid "Day : "
+msgstr "Днём : "
+
+#: ../plugins/weatheryahoo.py:203 ../plugins/weatheryahoo.py:206
+#: ../plugins/weatheryahoo.py:332
+msgid "Night : "
+msgstr "Ночью : "
+
+msgid "Enter WOEID of your city from http://weather.yahoo.com : "
+msgstr "Введите WOEID вашего города с http://weather.yahoo.com : "
+
+msgid "use C degree"
+msgstr "градусы Цельсия"
+
+msgid "use F degree"
+msgstr "градусы Фаренгейта"
+
+msgid "use metric of measures"
+msgstr "метрическая система мер"
+
+
+msgid "use english of measures"
+msgstr "английская система мер"
+
+msgid "Show the forecast for tomorrow"
+msgstr "Показать прогноз на завтра"
+
+msgid "Show on mouseover"
+msgstr "Показать при наведении курсора"
+
+
+
+
+
+
+
+
+
+
+# PLUGIN "DIGITAL CLOCK + ALARM CLOCK"
+
+msgid "Remind you that after about 5 minutes to do "
+msgstr "Напоминаем вам, что через 5 минут "
+
+#: ../plugins/alarmclock.py:290
+msgid "Today tasks:"
+msgstr "Сегодня:"
+
+#: ../plugins/alarmclock.py:303
+msgid "Today past tasks:"
+msgstr "Прошедшие сегодня:"
+
+#: ../plugins/alarmclock.py:314
+msgid "Tomorrow tasks:"
+msgstr "Завтра:"
+
+#: ../plugins/alarmclock.py:323
+msgid "Past tasks:"
+msgstr "Устаревшие:"
+
+
+
+# CONF
+
+#: ../plugins/conf/alarmclock.py:119
+msgid "Time :"
+msgstr "Время :"
+
+#: ../plugins/conf/alarmclock.py:135
+msgid "Date :"
+msgstr "Дата :"
+
+#: ../plugins/conf/alarmclock.py:150
+msgid "Tooltip :"
+msgstr "Подсказка :"
+
+#: ../plugins/conf/alarmclock.py:170
+msgid "_Info"
+msgstr "Справка"
+
+#: ../plugins/conf/alarmclock.py:243
+msgid "add new task"
+msgstr "Добавить новое напоминание"
+
+#: ../plugins/conf/alarmclock.py:550 ../plugins/conf/alarmclock.py:578
+msgid "Text new task"
+msgstr "Введите текст напоминания"
+
+#: ../plugins/conf/alarmclock.py:694
+msgid "by date"
+msgstr "по дате"
+
+#: ../plugins/conf/alarmclock.py:700
+msgid "by weekdays"
+msgstr "по дням недели"
+
+#: ../plugins/conf/alarmclock.py:746
+msgid "M"
+msgstr "П"
+
+#: ../plugins/conf/alarmclock.py:750
+msgid "T"
+msgstr "В"
+
+#: ../plugins/conf/alarmclock.py:754
+msgid "W"
+msgstr "С"
+
+#: ../plugins/conf/alarmclock.py:750
+msgid "Th"
+msgstr "Ч"
+
+#: ../plugins/conf/alarmclock.py:762
+msgid "F"
+msgstr "П"
+
+#: ../plugins/conf/alarmclock.py:766
+msgid "S"
+msgstr "С"
+
+#: ../plugins/conf/alarmclock.py:770
+msgid "Su"
+msgstr "В"
+
+#: ../plugins/conf/alarmclock.py:775
+msgid "Text:"
+msgstr "Текст :"
+
+#: ../plugins/conf/alarmclock.py:857
+msgid "Show notify with text task"
+msgstr "Показывать всплывающее сообщение с текстом напоминания"
+
+#: ../plugins/conf/alarmclock.py:861
+msgid "Show notify for 5 minutes before event"
+msgstr "Показывать всплывающее сообщение за 5 минут до события"
+
+
+
+
+
+# PLUGIN "NOTEPAD"
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Delete"
+msgstr "Удалить"
