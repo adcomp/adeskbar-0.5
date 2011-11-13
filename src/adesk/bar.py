@@ -851,7 +851,7 @@ class BarManager():
         ## code for  Tyler Mulligan - http://www.doknowevil.net/
         screen = gtk.gdk.screen_get_default()
         print "X default screen size: %d x %d" % (screen.get_width(), screen.get_height())
-        print "xid of root window: %d" % screen.get_root_window().xid
+        #~ print "xid of root window: %d" % screen.get_root_window().xid
         
         monitors = int(screen.get_n_monitors())
         print "== %d monitors ==" % monitors

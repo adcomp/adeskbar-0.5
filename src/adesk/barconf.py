@@ -890,10 +890,11 @@ class Conf():
             #~ traceback.print_exc()
             pass
 
-        if plugin_name == 'systray':
+        #~ if plugin_name == 'systray':
+        if not 1:
             print 'add systray, need to restart ..'
             # need to restart !!
-            self.saveconf()
+            self.save_conf()
             self.bar.restart()
             self.plg_mgr = self.bar.plg_mgr
         else:
@@ -903,6 +904,10 @@ class Conf():
                 self.remove_item(None)
                 self.plg_mgr.index.remove(index)
                 self.launcher.pop(index)
+        if plugin_name == 'systray':
+            self.save_conf()
+            self.bar.restart()
+            self.plg_mgr = self.bar.plg_mgr
 
     def new_item_menu(self, widget, app):
         
@@ -944,16 +949,17 @@ class Conf():
 
     def destroy(self, widget=None, data=None):
         ## save change
-        
+        self.save_conf()
+        ## and clear conf .. 
+        self.bar.bar_conf = None
+
+    def save_conf(self):
         # FIXME!! normalement plg_mgr == configuration.l_ind
         # mais l_ind n'est plus synchro !? .. ca fonctionnnait avant
         self.bar.configuration.l_ind = self.plg_mgr.index
         self.bar.configuration.save()
-        ## and clear conf .. 
-        self.bar.bar_conf = None
-
+        
     ### callback #######################################################
-    
     def set_opacity(self, widget):
         self.bar.opacity = widget.get_value()/100.0
         self.config['opacity'] = widget.get_value()
