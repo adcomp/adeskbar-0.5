@@ -1,3 +1,10 @@
+0.5.0	- new 'expander' plugin
+		- new system for plugins
+		- fix for dual screen (testing)
+		* fix 'places' plugin : thanks FSnow
+		* new plugins : thanks Vala
+			- mail / alarm / weather
+
 0.4.3   - fix bug in "tasklist"
         - tasklist now follow icon size
         - adeskbar should refresh on "gtk icon theme" change
