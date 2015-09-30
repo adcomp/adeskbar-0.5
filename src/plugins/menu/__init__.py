@@ -229,7 +229,7 @@ class Menu_UI(UI.PopupWindow):
                         if app.Comment == '' or app.Comment == ' ':
                             comment = '--'
                         elif len(app.Comment) > 50:
-                            comment == app.Comment[:50] + '..'
+                            comment = app.Comment[:50] + '..'
                         else:
                             comment = app.Comment
                         txt_label += '\n<small>' + comment + '</small>'
