@@ -233,7 +233,7 @@ class App:
 
 class XdgMenu():
     
-    def __init__(self, select_menu='applications'):
+    def __init__(self, select_menu='gnome-applications'):
         
         self.applications = {}
         self.category = None
