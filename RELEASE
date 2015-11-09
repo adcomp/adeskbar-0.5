@@ -1,3 +1,13 @@
+0.5.2	- updates:
+		- fix battery applet (but make it depend on python-power)
+		- add option for hiding quit from context menu
+		- add fix for popups so their text color can be fixed through
+		  gtk-2.0 theme's gtkrc if text in popups and tooltips is
+		  unreadable.
+		- update systray applet. Add some options for manipulating
+		  applet's background when bar is set to use gradient bg.
+		- add images for battery applet.
+
 0.5.0	- new 'expander' plugin
 		- new system for plugins
 		- fix for dual screen (testing)
