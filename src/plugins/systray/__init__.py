@@ -48,6 +48,38 @@ class Plugin(Plg.PluginContainer):
         global BG_COLOR
         BG_COLOR = bar.cfg['background_color']
 
+        if bar.cfg['bg_gradient']:
+            hexcolor1 = bar.cfg['bg_color'].strip()
+            hexcolor2 = bar.cfg['bg_gradient_color'].strip()
+
+            if len(hexcolor1) == 7 and len(hexcolor2) == 7:
+                if int(self.settings['gradient_invert']) == 1:
+                    r1, g1, b1 = int(hexcolor2[1:3], 16), int(hexcolor2[3:5], 16), int(hexcolor2[5:], 16)
+                    r2, g2, b2 = int(hexcolor1[1:3], 16), int(hexcolor1[3:5], 16), int(hexcolor1[5:], 16)
+                else:
+                    r1, g1, b1 = int(hexcolor1[1:3], 16), int(hexcolor1[3:5], 16), int(hexcolor1[5:], 16)
+                    r2, g2, b2 = int(hexcolor2[1:3], 16), int(hexcolor2[3:5], 16), int(hexcolor2[5:], 16)
+
+                r3 = int(r1 + (( r2 - r1 ) / float(self.settings['gradient_divider'])))
+                g3 = int(g1 + (( g2 - g1 ) / float(self.settings['gradient_divider'])))
+                b3 = int(b1 + (( b2 - b1 ) / float(self.settings['gradient_divider'])))
+
+                if r3 < 0:
+                    r3 = 0
+                if g3 < 0:
+                    g3 = 0
+                if b3 < 0:
+                    b3 = 0
+
+                if r3 > 255:
+                    r3 = 255
+                if g3 > 255:
+                    g3 = 255
+                if b3 > 255:
+                    b3 = 255
+
+                BG_COLOR = '#%02X%02X%02X' % (r3, g3, b3)
+
         self.systray = SysTray(display, error, self, bar)
 
     def destroy(self):
