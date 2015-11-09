@@ -1,2 +1,2 @@
 VERSION = 0.5
-RC = 1
+RC = 2
