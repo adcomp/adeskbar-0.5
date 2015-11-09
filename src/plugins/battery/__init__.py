@@ -13,6 +13,12 @@ import adesk.plugin as Plg
 import adesk.core as Core
 import adesk.ui as UI
 
+try:
+    import power
+except:
+    Core.logINFO('Plugin "battery" needs python-power => 1.5')
+    Core.logINFO(' -- github: https://github.com/oskarirauta/Power')
+
 class Plugin(Plg.Plugin):
     def __init__(self, bar, settings):
         Plg.Plugin.__init__(self, bar, settings)
@@ -30,6 +36,8 @@ class Plugin(Plg.Plugin):
 class Battery(UI.PopupWindow):
     def __init__(self, plugin, bar):
         UI.PopupWindow.__init__(self, bar, plugin)
+        self.power = power.PowerManagement()
+        self.firstAttempt = True
 
         box = gtk.HBox(False, 4)
         box.set_border_width(2)
@@ -46,248 +54,79 @@ class Battery(UI.PopupWindow):
         self.plugin.set_icon('images/plugins/battery/' + icon + '.svg')
 
     def update_status(self):
-        batteries = get_batts()
+        # batteries = get_batts()
+        power_status, time_remaining, capacity = self.power.get_ac_status()
+        error_encountered = False
+        tooltip_txt = 'On AC'
+        label_txt = 'AC only'
+        time_remaining_str = 'Unlimited'
 
-        if not batteries:
-            self.update_icon_status('notification-battery-000')
-            self.plugin.tooltip = "no battery"
-            self.label.set_markup("no battery")
-            return False
+        if capacity < 5:
+            icon = 'notification-battery-000'
+        elif capacity <= 15:
+            icon = 'notification-battery-010'
+        elif capacity <= 25:
+            icon = 'notification-battery-020'
+        elif capacity <= 35:
+            icon = 'notification-battery-030'
+        elif capacity <= 45:
+            icon = 'notification-battery-040'
+        elif capacity <= 55:
+            icon = 'notification-battery-050'
+        elif capacity <= 65:
+            icon = 'notification-battery-060'
+        elif capacity <= 75:
+            icon = 'notification-battery-070'
+        elif capacity <= 85:
+            icon = 'notification-battery-080'
+        elif capacity <= 95:
+            icon = 'notification-battery-090'
         else:
-            for battery in batteries:
-                percent_left, charging_state, time_remaining = get_info(battery)
-                percent_left = float(percent_left)
+            icon = 'notification-battery-100'
+        
+        if time_remaining >= 0:
+            offset_h, offset_m = divmod(int(time_remaining), 60)
+            time_delimeter = ':'
+            time_remaining_str = '{:02d}{}{:02d}'.format(abs(offset_h), time_delimeter, offset_m)
+        elif time_remaining == -1.0:
+            time_remaining_str = 'Unknown'
+            error_encountered = True
+        
+        if power_status == 1:
+            icon = 'notification-on-ac'
+            tooltip_txt = 'On AC'
+            label_txt = 'AC only'
+        elif power_status == 2:
+            icon += '-plugged'
+            tooltip_txt = str(int(capacity)) + '%'
+            label_txt = 'Charge: <b>' + str(int(capacity)) + '%</b>'
+            label_txt += '\nTime remaining until charged: <b>' + time_remaining_str + '</b>'
+        elif power_status == 3:
+            tooltip_txt = str(capacity) + '%'
+            label_txt = 'Charge: <b>' + str(int(capacity)) + '%</b>'
+            label_txt += '\nTime remaining until empty: <b>' + time_remaining_str + '</b>'
+        elif power_status == 4:
+            icon = 'notification-battery-100-plugged'
+            tooltip_txt = 'Full'
+            label_txt = 'Battery is <b>full</b>.'
+            label_txt += '\nTime remaining until empty: <b>' + time_remaining_str + '</b>'
+        elif power_status == 5:
+            icon = 'notification-on-ac'
+            tooltip_txt = 'Full, on AC'
+            label_txt = 'Battery is <b>full</b> and AC is plugged.'
+        else:
+            error_encountered = True
 
-            if percent_left < 5:
-                icon = 'notification-battery-000'
-            elif percent_left <= 15:
-                icon = 'notification-battery-010'
-            elif percent_left <= 25:
-                icon = 'notification-battery-020'
-            elif percent_left <= 35:
-                icon = 'notification-battery-030'
-            elif percent_left <= 45:
-                icon = 'notification-battery-040'
-            elif percent_left <= 55:
-                icon = 'notification-battery-050'
-            elif percent_left <= 65:
-                icon = 'notification-battery-060'
-            elif percent_left <= 75:
-                icon = 'notification-battery-070'
-            elif percent_left <= 85:
-                icon = 'notification-battery-080'
-            elif percent_left <= 95:
-                icon = 'notification-battery-090'
-            else:
-                icon = 'notification-battery-100'
-
-            if charging_state=="charging":
-                icon += '-plugged'
-
+        if not error_encountered:
             self.update_icon_status(icon)
-            self.plugin.tooltip = str(percent_left) + " %"
+            self.plugin.tooltip = tooltip_txt
+            self.label.set_markup(label_txt)
+        elif error_encountered and firstAttempt:
+            icon = 'notification-on-ac'
+            tooltip_txt = 'On AC'
+            label_txt = 'AC only'
+            self.update_icon_status(icon)
+            self.plugin.tooltip = tooltip_txt
+            self.label.set_markup(label_txt)
 
-            temp = "Charge : <b>" + str(int(percent_left)) + " %</b>"
-            if charging_state == 'discharging':
-                temp += "\n\nTime Left : <b>" + time_remaining + "</b>"
-            else:
-                temp += "\n\nTime Left : <b>--:--</b>"
-            self.label.set_markup(temp)
-        return True
-
-batt_basedir = "/proc/acpi/battery"
-
-def get_batts():
-    """ return an array of all available batteries in batt_basedir """
-    try:
-        return os.listdir(batt_basedir)
-    except Exception, e:
-        print "Unable to find a battery in '"+batt_basedir+"'"
-        return None
-
-def read_lines(file):
-    """ read file contents and return readlines() """
-    try:
-        f = open(file)
-        string = f.readlines()
-        f.close()
-        return string
-    except Exception, e:
-        print "Unable to open '"+file+"':\n" +str(e)
-        return None
-
-def get_value(contents, property):
-    """ return value of property from file contents (readlines) """
-    for c in contents:
-        if property in c:
-            try:
-                return c.split(':')[1].strip()
-            except IndexError, e:
-                print "Unable to parse file contents: "+str(e)
-                return None
-    return None
-
-def batt_percent(capacity, remaining_capacity):
-    """ calculate and return remaining battery percentage as a string """
-    # strip out units
-    try:
-        capacity = float(re.sub('\D', '', capacity))
-        remaining_capacity = float(re.sub('\D', '', remaining_capacity))
-    except:
-        # must be 'unknown' values, i.e. a bad battery return N/A
-        #~ print 'N/A'
-        return 'N/A'
-    # convert to float and calculate
-    percent = float((remaining_capacity * 100) / capacity)
-    # round to hundredths. 23.3524 || 23.3245 -> 23.35999 || 23.35000 + 0.001 = 23.360 || 23.351
-    percent = round(percent, 2) + 0.001
-    percent = str(percent)
-    # remove extra thousandths place from rounding
-    percent = percent[:(len(percent)-1)]
-    #~ print percent
-    return percent
-
-def time_left(remaining_capacity, present_rate):
-    """ calculate and return remaining time in 00:00 hours units """
-    # strip units
-    try:
-        remaining_capacity = float(re.sub('\D', '', remaining_capacity))
-        present_rate = float(re.sub('\D', '', present_rate))
-    except:
-        return 'N/A'
-    # get decimal time i.e. 1.34 hours
-    #~ print remaining_capacity, present_rate
-
-    decimal_time = remaining_capacity / present_rate
-    # round to hundreths (see batt_percent() for more info)
-    decimal_time = round(decimal_time, 2) + 0.001
-    decimal_time = str(decimal_time)
-    decimal_time = decimal_time[:(len(decimal_time)-1)]
-    # split to the left and right of the decimal and convert the right (hundredths) to minutes
-    whole = decimal_time.split('.')[0]
-    # pad <num> to 0<num>
-    if len(whole) == 1: whole = '0'+whole
-    hundredths = decimal_time.split('.')[1]
-    # convert hundredths place to minutes
-    minutes = (int(hundredths) * 60) / 100
-    minutes = str(minutes)
-    if len(minutes) == 1: minutes = '0'+minutes
-    return whole+':'+minutes
-
-def capacity_deviation(capacity, design_capacity):
-    """ calculate and return the gain or loss of capacity based on spec and last charge """
-    try:
-        int_capacity = int(re.sub('\D', '', capacity))
-        int_design_capacity = int(re.sub('\D', '', design_capacity))
-        if int_capacity > int_design_capacity:
-            diff = int_capacity - int_design_capacity
-            diff = str(diff)
-            return '+'+batt_percent(capacity, diff)
-        elif int_capacity < int_design_capacity:
-            diff = int_design_capacity - int_capacity
-            diff = str(diff)
-            return '-'+batt_percent(design_capacity, diff)
-        else: return '0.00'
-    except:
-        return 'N/A'
-
-def get_info(battery):
-    batt_dir = os.path.join(batt_basedir, battery)
-
-    # info data
-    info_file = os.path.join(batt_dir, 'info')
-    info_contents = read_lines(info_file)
-    if not info_contents: return
-
-    # state data
-    state_file = os.path.join(batt_dir, 'state')
-    state_contents = read_lines(state_file)
-    if not state_contents: return
-
-    charging_state          = get_value(state_contents, 'charging state')
-    remaining_capacity      = get_value(state_contents, 'remaining capacity')
-    present_rate            = get_value(state_contents, 'present rate')
-    capacity_low            = get_value(info_contents, 'design capacity low')
-    capacity_warning        = get_value(info_contents, 'design capacity warning')
-    #~ manufacturer            = get_value(info_contents, 'OEM info')
-    #~ model_number            = get_value(info_contents, 'model number')
-    #~ battery_type            = get_value(info_contents, 'battery type')
-    #~ battery_tech            = get_value(info_contents, 'battery technology')
-    design_capacity         = get_value(info_contents, 'design capacity')
-    last_full_capacity      = get_value(info_contents, 'last full capacity')
-
-    #~ print charging_state
-    #~ print remaining_capacity
-    #~ print present_rate
-    #~ print capacity_low
-    #~ print capacity_warning
-    #~ print manufacturer
-    #~ print model_number
-    #~ print battery_type
-    #~ print battery_tech
-    #~ print design_capacity
-    #~ print last_full_capacity
-
-
-    if last_full_capacity != '':
-        capacity = last_full_capacity
-    else:
-        capacity = design_capacity
-
-    # calculate percent left on battery
-    percent_left = batt_percent(capacity, remaining_capacity)
-
-    # calculate capacity gain or loss
-    capacity_dev = capacity_deviation(capacity, design_capacity)
-
-    # determine time remaining based on charging state
-    if charging_state == 'discharging':
-        # time left to discharge
-        time_remaining = time_left(remaining_capacity, present_rate)
-    elif charging_state == 'charging':
-        # time left to charge
-        # use the difference between total capacity and remaining capacity
-        try:
-            remaining = int(re.sub('\D', '', remaining_capacity))
-            capy = int(re.sub('\D', '', capacity))
-            net = capy - remaining
-            net = str(net)
-            time_remaining = time_left(net, present_rate)
-        except:
-            time_remaining = 'N/A'
-    else:
-        # must be charged: nothing to calculate; ACPWR
-        time_remaining = "--:--"
-
-    # determine alert status
-    try:
-        if int(re.sub('\D', '', remaining_capacity)) <= int(re.sub('\D', '', capacity_low)): alert = 'LOW!'
-        elif int(re.sub('\D', '', remaining_capacity)) <= int(re.sub('\D', '', capacity_warning)): alert = 'WARNING!'
-        else: alert = 'ok'
-    except:
-        alert = 'N/A'
-
-    # manufacturer, model number and battery technology may not have values; use N/A for screen output
-    #if not manufacturer: manufacturer = 'N/A'
-    #if not model_number: model_number = 'N/A'
-    #if not battery_tech: batter_tech = 'N/A'
-
-    # don't display anything larger than 100.00%
-    try:
-        if float(percent_left) > 100.00: percent_left = '100.00'
-    except:
-        pass
-
-    # output 100.00% if we have a 'charged' state
-    if charging_state == 'charged': percent_left = '100.00'
-
-    # output to screen
-    #~ print "         << "+battery+" >>"
-    #~ #print manufacturer+' - '+model_number+' | '+battery_type+' | '+battery_tech
-    #~ print "Remaining Charge           : "+percent_left+" %"
-    #~ print "Time Left                  : "+time_remaining+' Hrs'
-    #~ print "Charging State             : "+charging_state
-    #~ #print "Rated Capacity Deviation   : "+capacity_dev+" %"
-    #~ print "Charge Alert               : "+alert
-
-    return percent_left, charging_state, time_remaining
+        self.firstAttempt = False
