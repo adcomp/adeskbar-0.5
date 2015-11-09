@@ -63,6 +63,21 @@ for Debian / Ubuntu :
     sudo apt-get install python-xlib python-dbus python-keybinder python-pyinotify
 
 
+F.A.Q.
+------
+
+Q: Tooltips and content from various applet is unreadable. It seems that text
+is there, but with dark background, it cannot be readed. How do I fix it?
+
+A: You can change some attributes by changing your theme. aDeskBar exports 2
+widget names to aid in this process: ADeskBarTooltipWindow and ADeskBarPopupWindow.
+Study gtk2 theming and change these in your theme or home directory's .gtkrc.
+For Adwaita theme it was enough that I added this at the end of theme's gtkrc:
+# ADeskBar
+widget "ADeskBarTooltipWindow*" style "tooltips"
+widget "ADeskBarPopupWindow*" style "tooltips"
+
+
 Web
 ---
 

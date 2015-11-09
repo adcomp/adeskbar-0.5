@@ -736,6 +736,12 @@ class Conf():
         self.fade_hidden_checkbox.connect("toggled", self.set_fade_hidden)
         bBox.pack_start(self.fade_hidden_checkbox, False, True)
 
+        # show quit on menu
+        self.show_quit_checkbox = gtk.CheckButton(_('Show quit on context menu'))
+        self.show_quit_checkbox.set_active(self.config['show_quit'])
+        self.show_quit_checkbox.connect("toggled", self.set_show_quit)
+        bBox.pack_start(self.show_quit_checkbox, False, True)
+
 
         ## final pack ..
         scrolled = gtk.ScrolledWindow()
@@ -1039,6 +1045,10 @@ class Conf():
     def set_fade_hidden(self, widget):
         self.config['hidden_size'] = int(widget.get_active())
         self.bar.update()
+
+    def set_show_quit(self, widget):
+        self.config['show_quit'] = int(widget.get_active())
+        self.bar.create_menu()
 
 
     # Color

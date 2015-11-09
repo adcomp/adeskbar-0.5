@@ -220,10 +220,11 @@ class BarManager():
         menuPopup.connect("activate", self.edit_config)
         self.popupMenu.add(menuPopup)
         
-        ## Quit 
-        menuPopup = gtk.ImageMenuItem(gtk.STOCK_QUIT)
-        menuPopup.connect("activate", self.doquit)
-        self.popupMenu.add(menuPopup)
+        if self.cfg['show_quit']:
+            ## Quit 
+            menuPopup = gtk.ImageMenuItem(gtk.STOCK_QUIT)
+            menuPopup.connect("activate", self.doquit)
+            self.popupMenu.add(menuPopup)
      
         self.popupMenu.show_all()
 

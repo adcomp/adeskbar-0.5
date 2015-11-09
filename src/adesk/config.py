@@ -59,6 +59,8 @@ class Config:
         self.config['icons_effects'] = 3
         ## new in v0.5
         self.config['bg_gradient_alpha'] = 65535
+        ## new in v0.5.2
+        self.config['show_quit'] = True
 
     def read(self):
         Core.logINFO("read ..", 'config')
@@ -150,7 +152,7 @@ class Config:
         ## convert value : str -> True / False
         for key in ('auto_raise','smooth_hide', 'tooltips', 'reserve_space',
                     'show_border','fade_hidden', 'fixed_mode',
-                    'keep_below','bg_gradient'):
+                    'keep_below','bg_gradient', 'show_quit'):
 
             if self.config[key] in ('true','True','1','yes'):
                 self.config[key] = True

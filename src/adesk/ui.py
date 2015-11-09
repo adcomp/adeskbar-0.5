@@ -212,6 +212,7 @@ class PopupWindow(Window):
         self.connect("key-press-event", self.onkeypress)
         self.connect('size-allocate', self._size_allocate)
 
+        self.set_name('ADeskBarPopupWindow')
         self.set_border_width(border)
         self.focus_check = False
         self.opener = None
