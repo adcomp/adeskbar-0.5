@@ -121,7 +121,7 @@ class Battery(UI.PopupWindow):
             self.update_icon_status(icon)
             self.plugin.tooltip = tooltip_txt
             self.label.set_markup(label_txt)
-        elif error_encountered and firstAttempt:
+        elif error_encountered and self.firstAttempt:
             icon = 'notification-on-ac'
             tooltip_txt = 'On AC'
             label_txt = 'AC only'
