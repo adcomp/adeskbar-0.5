@@ -8,6 +8,7 @@
 # - Uses some code from Volti
 
 import gtk
+import gobject
 
 import adesk.plugin as Plg
 import adesk.core as Core
@@ -43,6 +44,7 @@ class Plugin(Plg.Plugin):
         self.connect('scroll-event', self.on_scroll_event)
 
     def onClick(self, widget, event):
+        self.volume.update_status()
         self.volume.toggle()
 
     def resize(self):
@@ -116,10 +118,19 @@ class Volume(UI.PopupWindow):
         self.box.show()
         
         self.set_volume(vol)
+ 
+        gobject.timeout_add(15000, self.update_status)
 
     def update_icon_status(self, icon):
         self.plugin.set_icon(icon)
 
+    def update_status(self):
+        if self.mixer:
+            self.mixer = alsa.Mixer(control=self.control, cardindex=self.card_index)
+            self.scale.set_value(int(self.mixer.getvolume()[0]))
+            return True
+        return False
+        
     def set_volume(self, volume):
         if self.mixer:
             try:
