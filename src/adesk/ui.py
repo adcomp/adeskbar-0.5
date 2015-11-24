@@ -150,7 +150,7 @@ class TooltipWindow(Window):
             self.set_tooltip(self.plugin.tooltip)
             self.show()
             self.reposition(self.plugin)
-        return False
+        return True
 
     def stop(self):
         if self.timeout:
