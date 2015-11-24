@@ -48,11 +48,16 @@ class Battery(UI.PopupWindow):
         box.pack_start(self.label)
         box.show_all()
 
+        gobject.timeout_add(4000, self.initial_update_status)
         gobject.timeout_add(60000, self.update_status)
 
     def update_icon_status(self, icon):
         self.plugin.set_icon('images/plugins/battery/' + icon + '.svg')
 
+    def initial_update_status(self):
+        self.update_status()
+        return False
+        
     def update_status(self):
         # batteries = get_batts()
         power_status, time_remaining, capacity = self.power.get_ac_status()
@@ -130,3 +135,4 @@ class Battery(UI.PopupWindow):
             self.label.set_markup(label_txt)
 
         self.firstAttempt = False
+        return True
